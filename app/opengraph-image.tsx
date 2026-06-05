@@ -53,10 +53,15 @@ export default function OgImage() {
 
             {/* 헤드라인 */}
             <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-              <span style={{ fontSize: "42px", fontWeight: 900, color: "#1A1A1A", lineHeight: 1.2, letterSpacing: "-1.5px" }}>
-                쇼핑 고민,{"\n"}
-                <span style={{ color: "#C00037" }}>AI가 30초</span>에 해결
-              </span>
+              <div style={{ display: "flex", flexDirection: "column", gap: "0px" }}>
+                <span style={{ fontSize: "40px", fontWeight: 900, color: "#1A1A1A", lineHeight: 1.2, letterSpacing: "-1px" }}>
+                  쇼핑 고민,
+                </span>
+                <div style={{ display: "flex", gap: "0px" }}>
+                  <span style={{ fontSize: "40px", fontWeight: 900, color: "#C00037", lineHeight: 1.2, letterSpacing: "-1px" }}>AI가 30초</span>
+                  <span style={{ fontSize: "40px", fontWeight: 900, color: "#1A1A1A", lineHeight: 1.2, letterSpacing: "-1px" }}>에 해결</span>
+                </div>
+              </div>
               <span style={{ fontSize: "18px", color: "#555555", lineHeight: 1.5 }}>
                 광고 말고 진짜 괜찮은 상품만 추천
               </span>
@@ -64,8 +69,13 @@ export default function OgImage() {
 
             {/* Trust signals */}
             <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-              {["✓  쿠팡 후기 기반 분석", "✓  광고 없는 추천", "✓  무료 이용"].map((t) => (
-                <span key={t} style={{ fontSize: "15px", color: "#C00037", fontWeight: 600 }}>{t}</span>
+              {["쿠팡 후기 기반 분석", "광고 없는 추천", "무료 이용"].map((t) => (
+                <div key={t} style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <div style={{ width: "18px", height: "18px", borderRadius: "9px", background: "#C00037", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ fontSize: "11px", color: "white", fontWeight: 900, lineHeight: 1 }}>v</span>
+                  </div>
+                  <span style={{ fontSize: "15px", color: "#333333", fontWeight: 600 }}>{t}</span>
+                </div>
               ))}
             </div>
           </div>
