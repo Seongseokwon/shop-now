@@ -1,0 +1,10 @@
+<svg width="32" height="32" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background circle -->
+  <rect width="36" height="36" rx="8" fill="#C00037"/>
+  <!-- Shopping bag body -->
+  <rect x="7" y="14" width="22" height="16" rx="3" fill="white"/>
+  <!-- Bag handle -->
+  <path d="M13 14V11C13 8.239 15.239 6 18 6C20.761 6 23 8.239 23 11V14" stroke="white" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+  <!-- Lightning bolt (AI spark) -->
+  <path d="M20 18L16.5 23H19.5L16 30L21.5 23.5H18.5L20 18Z" fill="#C00037" stroke-linejoin="round"/>
+</svg>

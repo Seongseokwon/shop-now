@@ -7,8 +7,11 @@ import "./globals.css";
 const geist = Geist({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "쇼핑GPT — AI 쇼핑 도우미",
+  title: "Shop Now — AI 쇼핑 도우미",
   description: "선물 추천, 살까말까 결정, 가성비 레이더. AI가 당신의 쇼핑 고민을 해결해드립니다.",
+  icons: {
+    icon: "/favicon.svg",
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
