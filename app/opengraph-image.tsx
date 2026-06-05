@@ -38,20 +38,11 @@ export default function OgImage() {
           >
             {/* 로고 */}
             <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-              <div
-                style={{
-                  width: "64px",
-                  height: "64px",
-                  borderRadius: "16px",
-                  background: "#C00037",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: "36px",
-                }}
-              >
-                🛍️
-              </div>
+              <svg width="64" height="64" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="6" y="13" width="24" height="18" rx="3" fill="#C00037" />
+                <path d="M13 13V10C13 7.239 15.239 5 18 5C20.761 5 23 7.239 23 10V13" stroke="#C00037" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+                <path d="M20 17L16.5 22H19.5L16 29L21.5 22.5H18.5L20 17Z" fill="white" />
+              </svg>
               <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
                 <span style={{ fontSize: "32px", fontWeight: 900, color: "#C00037", letterSpacing: "-1px", lineHeight: 1 }}>
                   Shop Now
