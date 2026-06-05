@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#ffffff"/>
+  <!-- Top accent bar -->
+  <rect width="1200" height="8" fill="#C00037"/>
+
+  <!-- Left decorative block -->
+  <rect x="0" y="0" width="420" height="630" fill="#FFF5F8"/>
+
+  <!-- Logo area -->
+  <circle cx="210" cy="280" r="90" fill="#C00037"/>
+  <text x="210" y="300" font-family="Arial, sans-serif" font-size="64" font-weight="900" fill="white" text-anchor="middle" dominant-baseline="middle">🛍</text>
+
+  <!-- App name -->
+  <text x="210" y="400" font-family="Arial, sans-serif" font-size="36" font-weight="800" fill="#C00037" text-anchor="middle">쇼핑GPT</text>
+  <text x="210" y="440" font-family="Arial, sans-serif" font-size="18" fill="#666666" text-anchor="middle">AI 쇼핑 도우미</text>
+
+  <!-- Right content -->
+  <!-- Feature 1 -->
+  <rect x="480" y="120" width="660" height="100" rx="16" fill="#F8F9FA" stroke="#E9ECEF" stroke-width="2"/>
+  <text x="540" y="165" font-family="Arial, sans-serif" font-size="28" fill="#C00037">🎁</text>
+  <text x="590" y="162" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1A1A1A">선물 추천기</text>
+  <text x="590" y="195" font-family="Arial, sans-serif" font-size="16" fill="#666666">조건 입력 → AI가 선물 TOP3 추천</text>
+
+  <!-- Feature 2 -->
+  <rect x="480" y="250" width="660" height="100" rx="16" fill="#F8F9FA" stroke="#E9ECEF" stroke-width="2"/>
+  <text x="540" y="295" font-family="Arial, sans-serif" font-size="28" fill="#0066FF">🤔</text>
+  <text x="590" y="292" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1A1A1A">살까말까 결정기</text>
+  <text x="590" y="325" font-family="Arial, sans-serif" font-size="16" fill="#666666">AI가 구매 추천도를 점수로 판단</text>
+
+  <!-- Feature 3 -->
+  <rect x="480" y="380" width="660" height="100" rx="16" fill="#F8F9FA" stroke="#E9ECEF" stroke-width="2"/>
+  <text x="540" y="425" font-family="Arial, sans-serif" font-size="28" fill="#28A745">📦</text>
+  <text x="590" y="422" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1A1A1A">가성비 레이더</text>
+  <text x="590" y="455" font-family="Arial, sans-serif" font-size="16" fill="#666666">예산별 가성비 최고 상품 발굴</text>
+
+  <!-- Bottom tagline -->
+  <text x="600" y="565" font-family="Arial, sans-serif" font-size="20" fill="#999999" text-anchor="middle">쇼핑 고민, AI에게 맡기세요</text>
+</svg>
