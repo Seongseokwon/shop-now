@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import CoupangButton from "@/components/CoupangButton";
+import KakaoShareButton from "@/components/KakaoShareButton";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import PillGroup from "@/components/PillGroup";
 
 const CATEGORIES = [
   "무선이어폰", "블루투스스피커", "보조배터리", "마사지기", "공기청정기",
@@ -75,44 +77,24 @@ export default function BudgetPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-bold">가성비 레이더</h2>
-        <p className="text-[#666666] text-sm mt-1">카테고리와 예산을 선택하면 최고의 선택을 찾아드립니다</p>
+        <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">💸 가성비 레이더</h2>
+        <p className="text-[#555555] text-sm mt-1">카테고리·예산 선택 → 이 가격대 진짜 최고 상품 발굴</p>
       </div>
 
       {!result && !loading && (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="budget-category" className="text-sm font-medium">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium">
               카테고리<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
-            </label>
-            <select
-              id="budget-category"
-              required
-              aria-required="true"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="border border-[#E9ECEF] rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-[#C00037] focus:ring-2 focus:ring-[#C00037]/20"
-            >
-              <option value="">선택하세요</option>
-              {CATEGORIES.map((c) => <option key={c}>{c}</option>)}
-            </select>
+            </span>
+            <PillGroup options={CATEGORIES} value={category} onChange={setCategory} />
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label htmlFor="budget-amount" className="text-sm font-medium">
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium">
               예산 (이하)<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
-            </label>
-            <select
-              id="budget-amount"
-              required
-              aria-required="true"
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-              className="border border-[#E9ECEF] rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-[#C00037] focus:ring-2 focus:ring-[#C00037]/20"
-            >
-              <option value="">선택하세요</option>
-              {BUDGETS.map((b) => <option key={b}>{b}</option>)}
-            </select>
+            </span>
+            <PillGroup options={BUDGETS} value={budget} onChange={setBudget} />
           </div>
 
           {error && (
@@ -162,6 +144,11 @@ export default function BudgetPage() {
             <span className="text-yellow-800">💡</span>
             <p className="text-sm text-yellow-800">구매 팁: {result.buying_tip}</p>
           </div>
+
+          <KakaoShareButton
+            title={`📦 ${category} 가성비 레이더 결과`}
+            description={`예산 ${budget} 이하 · 가성비 최고: ${result.items.find((i) => i.label === "가성비 최고")?.name ?? result.items[0]?.name ?? ""} — 쇼핑GPT에서 가성비 1위 찾아보세요`}
+          />
 
           <button
             onClick={reset}

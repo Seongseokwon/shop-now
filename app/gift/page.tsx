@@ -4,6 +4,7 @@ import { useState } from "react";
 import CoupangButton from "@/components/CoupangButton";
 import KakaoShareButton from "@/components/KakaoShareButton";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import PillGroup from "@/components/PillGroup";
 
 const RELATIONS = ["부모님", "연인", "친구", "직장동료", "형제자매", "선생님"];
 const AGES = ["10대", "20대", "30대", "40대", "50대이상"];
@@ -86,80 +87,36 @@ export default function GiftPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-bold text-[#1A1A1A]">선물 추천기</h2>
-        <p className="text-[#666666] text-sm mt-1">조건을 입력하면 AI가 최적의 선물 3개를 추천해드립니다</p>
+        <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">🎁 선물 추천기</h2>
+        <p className="text-[#555555] text-sm mt-1">조건 입력 → AI가 실패 없는 선물 TOP 3 추천</p>
       </div>
 
       {!result && !loading && (
-        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-          <div className="flex flex-col gap-1">
-            <label htmlFor="gift-relation" className="text-sm font-medium">
+        <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium">
               받는 사람과의 관계<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
-            </label>
-            <select
-              id="gift-relation"
-              required
-              aria-required="true"
-              value={form.relation}
-              onChange={(e) => setForm({ ...form, relation: e.target.value })}
-              className="border border-[#E9ECEF] rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-[#C00037] focus:ring-2 focus:ring-[#C00037]/20"
-            >
-              <option value="">선택하세요</option>
-              {RELATIONS.map((r) => <option key={r}>{r}</option>)}
-            </select>
+            </span>
+            <PillGroup options={RELATIONS} value={form.relation} onChange={(v) => setForm({ ...form, relation: v })} />
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label htmlFor="gift-age" className="text-sm font-medium">
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium">
               나이대<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
-            </label>
-            <select
-              id="gift-age"
-              required
-              aria-required="true"
-              value={form.age}
-              onChange={(e) => setForm({ ...form, age: e.target.value })}
-              className="border border-[#E9ECEF] rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-[#C00037] focus:ring-2 focus:ring-[#C00037]/20"
-            >
-              <option value="">선택하세요</option>
-              {AGES.map((a) => <option key={a}>{a}</option>)}
-            </select>
+            </span>
+            <PillGroup options={AGES} value={form.age} onChange={(v) => setForm({ ...form, age: v })} />
           </div>
 
-          <div className="flex flex-col gap-1">
-            <label htmlFor="gift-budget" className="text-sm font-medium">
+          <div className="flex flex-col gap-2">
+            <span className="text-sm font-medium">
               예산<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
-            </label>
-            <select
-              id="gift-budget"
-              required
-              aria-required="true"
-              value={form.budget}
-              onChange={(e) => setForm({ ...form, budget: e.target.value })}
-              className="border border-[#E9ECEF] rounded-lg px-3 py-2.5 text-sm bg-white focus:outline-none focus:border-[#C00037] focus:ring-2 focus:ring-[#C00037]/20"
-            >
-              <option value="">선택하세요</option>
-              {BUDGETS.map((b) => <option key={b}>{b}</option>)}
-            </select>
+            </span>
+            <PillGroup options={BUDGETS} value={form.budget} onChange={(v) => setForm({ ...form, budget: v })} />
           </div>
 
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">성별<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span></span>
-            <div className="flex gap-3">
-              {GENDERS.map((g) => (
-                <label key={g} className="flex items-center gap-2.5 cursor-pointer p-2 -m-2 rounded active:bg-[#F8F9FA]">
-                  <input
-                    type="radio"
-                    name="gender"
-                    value={g}
-                    checked={form.gender === g}
-                    onChange={(e) => setForm({ ...form, gender: e.target.value })}
-                    className="w-5 h-5 accent-[#C00037]"
-                  />
-                  <span className="text-sm">{g}</span>
-                </label>
-              ))}
-            </div>
+            <PillGroup options={GENDERS} value={form.gender} onChange={(v) => setForm({ ...form, gender: v })} />
           </div>
 
           {error && (
@@ -208,8 +165,8 @@ export default function GiftPage() {
           </div>
 
           <KakaoShareButton
-            title="AI가 추천한 선물이에요 🎁"
-            description="쇼핑GPT에서 나만을 위한 쇼핑 추천 받아보세요"
+            title={`🎁 ${form.relation}을 위한 선물 TOP3`}
+            description={`1위: ${result.items[0]?.name ?? ""} · 2위: ${result.items[1]?.name ?? ""} — 쇼핑GPT에서 AI 선물 추천 받아보세요`}
           />
 
           <button

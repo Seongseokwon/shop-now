@@ -4,6 +4,7 @@ import { useState } from "react";
 import CoupangButton from "@/components/CoupangButton";
 import KakaoShareButton from "@/components/KakaoShareButton";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import MultiPillGroup from "@/components/MultiPillGroup";
 
 const REASONS = [
   "가격이 비쌈",
@@ -72,8 +73,8 @@ export default function DecidePage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-xl font-bold text-[#1A1A1A]">살까말까 결정기</h2>
-        <p className="text-[#666666] text-sm mt-1">AI가 냉정하게 구매 여부를 판단해드립니다</p>
+        <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">🤔 살까말까 결정기</h2>
+        <p className="text-[#555555] text-sm mt-1">상품명 입력 → AI가 사야 할지 냉정하게 판단</p>
       </div>
 
       {!result && !loading && (
@@ -108,19 +109,7 @@ export default function DecidePage() {
 
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">고민 이유 (복수 선택)</span>
-            <div className="flex flex-col gap-2">
-              {REASONS.map((r) => (
-                <label key={r} className="flex items-center gap-2.5 cursor-pointer p-2 -m-2 rounded active:bg-[#F8F9FA]">
-                  <input
-                    type="checkbox"
-                    checked={reasons.includes(r)}
-                    onChange={() => toggleReason(r)}
-                    className="w-5 h-5 accent-[#C00037]"
-                  />
-                  <span className="text-sm">{r}</span>
-                </label>
-              ))}
-            </div>
+            <MultiPillGroup options={REASONS} values={reasons} onChange={toggleReason} />
           </div>
 
           {error && (
@@ -205,8 +194,8 @@ export default function DecidePage() {
           </div>
 
           <KakaoShareButton
-            title="살까말까 AI에게 물어봤어요 🤔"
-            description="쇼핑GPT에서 구매 결정을 AI에게 맡겨보세요"
+            title={`${isBuy ? "✅ 사세요!" : "🚫 참으세요!"} — ${productName}`}
+            description={`AI 구매 추천도 ${result.score}점 · ${result.verdict_comment.slice(0, 40)}… — 쇼핑GPT에서 살까말까 AI에게 물어보세요`}
           />
 
           <button
