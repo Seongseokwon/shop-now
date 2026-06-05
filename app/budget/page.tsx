@@ -7,8 +7,16 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import PillGroup from "@/components/PillGroup";
 
 const CATEGORIES = [
-  "무선이어폰", "블루투스스피커", "보조배터리", "마사지기", "공기청정기",
-  "청소기", "노트북", "스마트워치", "커피메이커", "운동기구",
+  "무선이어폰",
+  "블루투스스피커",
+  "보조배터리",
+  "마사지기",
+  "공기청정기",
+  "청소기",
+  "노트북",
+  "스마트워치",
+  "커피메이커",
+  "운동기구",
 ];
 const BUDGETS = ["5만원", "10만원", "20만원", "30만원", "50만원"];
 
@@ -77,29 +85,44 @@ export default function BudgetPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">💸 가성비 레이더</h2>
-        <p className="text-[#555555] text-sm mt-1">카테고리·예산 선택 → 이 가격대 진짜 최고 상품 발굴</p>
+        <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">
+          💸 가성비 레이더
+        </h2>
+        <p className="text-[#555555] text-sm mt-1">
+          카테고리·예산 선택 → 이 가격대 진짜 최고 상품 발굴
+        </p>
       </div>
 
       {!result && !loading && (
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">
-              카테고리<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
+              카테고리
+              <span className="text-[#DC3545] ml-0.5" aria-label="필수">
+                *
+              </span>
             </span>
-            <PillGroup options={CATEGORIES} value={category} onChange={setCategory} />
+            <PillGroup
+              options={CATEGORIES}
+              value={category}
+              onChange={setCategory}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">
-              예산 (이하)<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
+              예산 (이하)
+              <span className="text-[#DC3545] ml-0.5" aria-label="필수">
+                *
+              </span>
             </span>
             <PillGroup options={BUDGETS} value={budget} onChange={setBudget} />
           </div>
 
           {error && (
             <p className="text-[#DC3545] text-sm flex items-center gap-1.5">
-              <span aria-hidden="true">⚠️</span>{error}
+              <span aria-hidden="true">⚠️</span>
+              {error}
             </p>
           )}
 
@@ -121,15 +144,22 @@ export default function BudgetPage() {
 
           <div className="flex flex-col gap-4">
             {result.items.map((item) => (
-              <div key={item.rank} className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-2xl p-4 flex flex-col gap-3">
+              <div
+                key={item.rank}
+                className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-2xl p-4 flex flex-col gap-3"
+              >
                 <div className="flex items-center gap-2">
-                  <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${LABEL_STYLES[item.label] ?? "bg-gray-200 text-gray-700"}`}>
+                  <span
+                    className={`text-xs font-bold px-2.5 py-1 rounded-full ${LABEL_STYLES[item.label] ?? "bg-gray-200 text-gray-700"}`}
+                  >
                     {item.label}
                   </span>
                 </div>
                 <div>
                   <p className="font-semibold text-sm">{item.name}</p>
-                  <p className="text-[#C00037] text-sm font-medium mt-0.5">예상가격 {item.price}</p>
+                  <p className="text-[#C00037] text-sm font-medium mt-0.5">
+                    예상가격 {item.price}
+                  </p>
                 </div>
                 <div className="flex flex-col gap-1">
                   <p className="text-sm text-[#1A1A1A]">⭐ {item.highlight}</p>
@@ -142,7 +172,9 @@ export default function BudgetPage() {
 
           <div className="bg-yellow-50 border-l-4 border-yellow-400 rounded-xl p-4 flex gap-2">
             <span className="text-yellow-800">💡</span>
-            <p className="text-sm text-yellow-800">구매 팁: {result.buying_tip}</p>
+            <p className="text-sm text-yellow-800">
+              구매 팁: {result.buying_tip}
+            </p>
           </div>
 
           <KakaoShareButton

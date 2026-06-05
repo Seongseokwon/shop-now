@@ -2,7 +2,11 @@ import { NextRequest, NextResponse } from "next/server";
 import getOpenAI from "@/lib/openai";
 import { generateCoupangLink } from "@/lib/coupang";
 
-async function callOpenAI(productName: string, price: string, reasons: string[]) {
+async function callOpenAI(
+  productName: string,
+  price: string,
+  reasons: string[]
+) {
   const prompt = `당신은 냉철한 소비 컨설턴트입니다. 사용자의 구매 고민을 분석하고 명확한 결론을 내려주세요.
 
 상품: ${productName}
@@ -42,14 +46,24 @@ export async function POST(req: NextRequest) {
   const { productName, price, reasons } = await req.json();
 
   if (typeof productName !== "string" || !productName.trim()) {
-    return NextResponse.json({ error: "상품명을 입력해주세요." }, { status: 400 });
+    return NextResponse.json(
+      { error: "상품명을 입력해주세요." },
+      { status: 400 }
+    );
   }
 
   let raw: string;
   try {
-    raw = await callOpenAI(productName, typeof price === "string" ? price : "", Array.isArray(reasons) ? reasons : []);
+    raw = await callOpenAI(
+      productName,
+      typeof price === "string" ? price : "",
+      Array.isArray(reasons) ? reasons : []
+    );
   } catch {
-    return NextResponse.json({ error: "AI 호출 중 오류가 발생했습니다." }, { status: 500 });
+    return NextResponse.json(
+      { error: "AI 호출 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
   }
 
   let parsed: {
@@ -63,7 +77,10 @@ export async function POST(req: NextRequest) {
   try {
     parsed = JSON.parse(raw);
   } catch {
-    return NextResponse.json({ error: "잠시 후 다시 시도해주세요." }, { status: 500 });
+    return NextResponse.json(
+      { error: "잠시 후 다시 시도해주세요." },
+      { status: 500 }
+    );
   }
 
   const alternatives = parsed.alternatives.map((alt) => ({

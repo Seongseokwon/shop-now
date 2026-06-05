@@ -6,7 +6,11 @@ type MultiPillGroupProps = {
   onChange: (v: string) => void;
 };
 
-export default function MultiPillGroup({ options, values, onChange }: MultiPillGroupProps) {
+export default function MultiPillGroup({
+  options,
+  values,
+  onChange,
+}: MultiPillGroupProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {options.map((opt) => {

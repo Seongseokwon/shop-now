@@ -36,7 +36,12 @@ type Result = {
 };
 
 export default function GiftPage() {
-  const [form, setForm] = useState({ relation: "", age: "", budget: "", gender: "" });
+  const [form, setForm] = useState({
+    relation: "",
+    age: "",
+    budget: "",
+    gender: "",
+  });
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
   const [error, setError] = useState("");
@@ -87,47 +92,88 @@ export default function GiftPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">🎁 선물 추천기</h2>
-        <p className="text-[#555555] text-sm mt-1">조건 입력 → AI가 실패 없는 선물 TOP 3 추천</p>
+        <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">
+          🎁 선물 추천기
+        </h2>
+        <p className="text-[#555555] text-sm mt-1">
+          조건 입력 → AI가 실패 없는 선물 TOP 3 추천
+        </p>
       </div>
 
       {!result && !loading && (
         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">
-              받는 사람과의 관계<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
+              받는 사람과의 관계
+              <span className="text-[#DC3545] ml-0.5" aria-label="필수">
+                *
+              </span>
             </span>
-            <PillGroup options={RELATIONS} value={form.relation} onChange={(v) => setForm({ ...form, relation: v })} />
+            <PillGroup
+              options={RELATIONS}
+              value={form.relation}
+              onChange={(v) => setForm({ ...form, relation: v })}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">
-              나이대<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
+              나이대
+              <span className="text-[#DC3545] ml-0.5" aria-label="필수">
+                *
+              </span>
             </span>
-            <PillGroup options={AGES} value={form.age} onChange={(v) => setForm({ ...form, age: v })} />
+            <PillGroup
+              options={AGES}
+              value={form.age}
+              onChange={(v) => setForm({ ...form, age: v })}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">
-              예산<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
+              예산
+              <span className="text-[#DC3545] ml-0.5" aria-label="필수">
+                *
+              </span>
             </span>
-            <PillGroup options={BUDGETS} value={form.budget} onChange={(v) => setForm({ ...form, budget: v })} />
+            <PillGroup
+              options={BUDGETS}
+              value={form.budget}
+              onChange={(v) => setForm({ ...form, budget: v })}
+            />
           </div>
 
           <div className="flex flex-col gap-2">
-            <span className="text-sm font-medium">성별<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span></span>
-            <PillGroup options={GENDERS} value={form.gender} onChange={(v) => setForm({ ...form, gender: v })} />
+            <span className="text-sm font-medium">
+              성별
+              <span className="text-[#DC3545] ml-0.5" aria-label="필수">
+                *
+              </span>
+            </span>
+            <PillGroup
+              options={GENDERS}
+              value={form.gender}
+              onChange={(v) => setForm({ ...form, gender: v })}
+            />
           </div>
 
           {error && (
             <p className="text-[#DC3545] text-sm flex items-center gap-1.5">
-              <span aria-hidden="true">⚠️</span>{error}
+              <span aria-hidden="true">⚠️</span>
+              {error}
             </p>
           )}
 
           <button
             type="submit"
-            disabled={loading || !form.relation || !form.age || !form.budget || !form.gender}
+            disabled={
+              loading ||
+              !form.relation ||
+              !form.age ||
+              !form.budget ||
+              !form.gender
+            }
             className="bg-[#C00037] hover:bg-[#A0002D] disabled:bg-[#CCCCCC] disabled:text-white disabled:cursor-not-allowed text-white font-semibold py-3 rounded-xl transition-colors"
           >
             {loading ? "분석 중..." : "AI 추천 받기"}
@@ -141,7 +187,10 @@ export default function GiftPage() {
         <div className="flex flex-col gap-4">
           <div className="flex flex-col gap-4">
             {result.items.map((item) => (
-              <div key={item.rank} className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-2xl p-4 flex flex-col gap-3">
+              <div
+                key={item.rank}
+                className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-2xl p-4 flex flex-col gap-3"
+              >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
                     <span className="bg-[#C00037] text-white text-xs font-bold w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0">
@@ -149,12 +198,18 @@ export default function GiftPage() {
                     </span>
                     <span className="font-semibold text-sm">{item.name}</span>
                   </div>
-                  <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${CATEGORY_COLORS[item.category] ?? "bg-gray-100 text-gray-600"}`}>
+                  <span
+                    className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${CATEGORY_COLORS[item.category] ?? "bg-gray-100 text-gray-600"}`}
+                  >
                     {item.category}
                   </span>
                 </div>
-                <p className="text-[#666666] text-sm leading-relaxed">{item.reason}</p>
-                <p className="text-[#C00037] text-sm font-medium">예상가격 {item.price}</p>
+                <p className="text-[#666666] text-sm leading-relaxed">
+                  {item.reason}
+                </p>
+                <p className="text-[#C00037] text-sm font-medium">
+                  예상가격 {item.price}
+                </p>
                 <CoupangButton url={item.coupangUrl} />
               </div>
             ))}

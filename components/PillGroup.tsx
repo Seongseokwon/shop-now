@@ -6,7 +6,11 @@ type PillGroupProps = {
   onChange: (v: string) => void;
 };
 
-export default function PillGroup({ options, value, onChange }: PillGroupProps) {
+export default function PillGroup({
+  options,
+  value,
+  onChange,
+}: PillGroupProps) {
   return (
     <div className="flex flex-wrap gap-2">
       {options.map((opt) => (

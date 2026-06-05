@@ -6,17 +6,20 @@ import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"] });
 
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? "https://shop-now-ebon.vercel.app";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BASE_URL ?? "https://shop-now-ebon.vercel.app";
 
 export const metadata: Metadata = {
   title: "Shop Now — AI 쇼핑 도우미",
-  description: "선물 추천, 살까말까 결정, 가성비 레이더. AI가 당신의 쇼핑 고민을 해결해드립니다.",
+  description:
+    "선물 추천, 살까말까 결정, 가성비 레이더. AI가 당신의 쇼핑 고민을 해결해드립니다.",
   icons: {
     icon: "/favicon.svg",
   },
   openGraph: {
     title: "Shop Now — AI 쇼핑 도우미",
-    description: "선물 추천 · 살까말까 결정 · 가성비 레이더. 쇼핑 고민, AI에게 맡기세요.",
+    description:
+      "선물 추천 · 살까말까 결정 · 가성비 레이더. 쇼핑 고민, AI에게 맡기세요.",
     url: BASE_URL,
     siteName: "쇼핑GPT",
     images: [
@@ -33,12 +36,17 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Shop Now — AI 쇼핑 도우미",
-    description: "선물 추천 · 살까말까 결정 · 가성비 레이더. 쇼핑 고민, AI에게 맡기세요.",
+    description:
+      "선물 추천 · 살까말까 결정 · 가성비 레이더. 쇼핑 고민, AI에게 맡기세요.",
     images: [`${BASE_URL}/opengraph-image`],
   },
 };
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="ko" className={geist.className}>
       <body className="bg-white text-[#1A1A1A] min-h-screen">

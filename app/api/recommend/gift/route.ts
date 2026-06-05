@@ -2,7 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import getOpenAI from "@/lib/openai";
 import { generateCoupangLink } from "@/lib/coupang";
 
-async function callOpenAI(relation: string, age: string, budget: string, gender: string) {
+async function callOpenAI(
+  relation: string,
+  age: string,
+  budget: string,
+  gender: string
+) {
   const prompt = `당신은 쇼핑 전문가입니다. 사용자의 선물 조건에 맞는 상품을 추천해주세요.
 
 조건:
@@ -49,26 +54,49 @@ export async function POST(req: NextRequest) {
   const { relation, age, budget, gender } = await req.json();
 
   if (
-    typeof relation !== "string" || !relation ||
-    typeof age !== "string" || !age ||
-    typeof budget !== "string" || !budget ||
-    typeof gender !== "string" || !gender
+    typeof relation !== "string" ||
+    !relation ||
+    typeof age !== "string" ||
+    !age ||
+    typeof budget !== "string" ||
+    !budget ||
+    typeof gender !== "string" ||
+    !gender
   ) {
-    return NextResponse.json({ error: "필수 항목이 누락되었습니다." }, { status: 400 });
+    return NextResponse.json(
+      { error: "필수 항목이 누락되었습니다." },
+      { status: 400 }
+    );
   }
 
   let raw: string;
   try {
     raw = await callOpenAI(relation, age, budget, gender);
   } catch {
-    return NextResponse.json({ error: "AI 호출 중 오류가 발생했습니다." }, { status: 500 });
+    return NextResponse.json(
+      { error: "AI 호출 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
   }
 
-  let parsed: { items: { rank: number; name: string; reason: string; price: string; keyword: string; category: string }[]; comment: string };
+  let parsed: {
+    items: {
+      rank: number;
+      name: string;
+      reason: string;
+      price: string;
+      keyword: string;
+      category: string;
+    }[];
+    comment: string;
+  };
   try {
     parsed = JSON.parse(raw);
   } catch {
-    return NextResponse.json({ error: "잠시 후 다시 시도해주세요." }, { status: 500 });
+    return NextResponse.json(
+      { error: "잠시 후 다시 시도해주세요." },
+      { status: 500 }
+    );
   }
 
   const items = parsed.items.map((item) => ({

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 
-
 const links = [
   { href: "/gift", label: "선물추천", shortLabel: "🎁 선물" },
   { href: "/decide", label: "살까말까", shortLabel: "🤔 살까?" },

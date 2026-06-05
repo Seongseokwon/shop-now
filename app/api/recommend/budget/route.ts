@@ -40,26 +40,48 @@ async function callOpenAI(category: string, budget: string) {
 export async function POST(req: NextRequest) {
   const { category, budget } = await req.json();
 
-  if (typeof category !== "string" || !category || typeof budget !== "string" || !budget) {
-    return NextResponse.json({ error: "카테고리와 예산을 선택해주세요." }, { status: 400 });
+  if (
+    typeof category !== "string" ||
+    !category ||
+    typeof budget !== "string" ||
+    !budget
+  ) {
+    return NextResponse.json(
+      { error: "카테고리와 예산을 선택해주세요." },
+      { status: 400 }
+    );
   }
 
   let raw: string;
   try {
     raw = await callOpenAI(category, budget);
   } catch {
-    return NextResponse.json({ error: "AI 호출 중 오류가 발생했습니다." }, { status: 500 });
+    return NextResponse.json(
+      { error: "AI 호출 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
   }
 
   let parsed: {
     title: string;
-    items: { rank: number; label: string; name: string; price: string; keyword: string; highlight: string; for_whom: string }[];
+    items: {
+      rank: number;
+      label: string;
+      name: string;
+      price: string;
+      keyword: string;
+      highlight: string;
+      for_whom: string;
+    }[];
     buying_tip: string;
   };
   try {
     parsed = JSON.parse(raw);
   } catch {
-    return NextResponse.json({ error: "잠시 후 다시 시도해주세요." }, { status: 500 });
+    return NextResponse.json(
+      { error: "잠시 후 다시 시도해주세요." },
+      { status: 500 }
+    );
   }
 
   const items = parsed.items.map((item) => ({

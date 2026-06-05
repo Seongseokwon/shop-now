@@ -33,7 +33,9 @@ export default function DecidePage() {
   const [error, setError] = useState("");
 
   function toggleReason(r: string) {
-    setReasons((prev) => prev.includes(r) ? prev.filter((x) => x !== r) : [...prev, r]);
+    setReasons((prev) =>
+      prev.includes(r) ? prev.filter((x) => x !== r) : [...prev, r]
+    );
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -73,15 +75,22 @@ export default function DecidePage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">🤔 살까말까 결정기</h2>
-        <p className="text-[#555555] text-sm mt-1">상품명 입력 → AI가 사야 할지 냉정하게 판단</p>
+        <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">
+          🤔 살까말까 결정기
+        </h2>
+        <p className="text-[#555555] text-sm mt-1">
+          상품명 입력 → AI가 사야 할지 냉정하게 판단
+        </p>
       </div>
 
       {!result && !loading && (
         <form onSubmit={handleSubmit} className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
             <label htmlFor="decide-product" className="text-sm font-medium">
-              고민 중인 상품명<span className="text-[#DC3545] ml-0.5" aria-label="필수">*</span>
+              고민 중인 상품명
+              <span className="text-[#DC3545] ml-0.5" aria-label="필수">
+                *
+              </span>
             </label>
             <input
               id="decide-product"
@@ -96,7 +105,9 @@ export default function DecidePage() {
           </div>
 
           <div className="flex flex-col gap-1">
-            <label htmlFor="decide-price" className="text-sm font-medium">현재 가격 (선택)</label>
+            <label htmlFor="decide-price" className="text-sm font-medium">
+              현재 가격 (선택)
+            </label>
             <input
               id="decide-price"
               type="text"
@@ -109,12 +120,17 @@ export default function DecidePage() {
 
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">고민 이유 (복수 선택)</span>
-            <MultiPillGroup options={REASONS} values={reasons} onChange={toggleReason} />
+            <MultiPillGroup
+              options={REASONS}
+              values={reasons}
+              onChange={toggleReason}
+            />
           </div>
 
           {error && (
             <p className="text-[#DC3545] text-sm flex items-center gap-1.5">
-              <span aria-hidden="true">⚠️</span>{error}
+              <span aria-hidden="true">⚠️</span>
+              {error}
             </p>
           )}
 
@@ -133,8 +149,12 @@ export default function DecidePage() {
       {result && (
         <div className="flex flex-col gap-4">
           {/* Verdict */}
-          <div className={`rounded-2xl p-4 sm:p-6 text-center ${isBuy ? "bg-[#28A745]/10 border border-[#28A745]/20" : "bg-[#DC3545]/10 border border-[#DC3545]/20"}`}>
-            <p className={`text-3xl sm:text-4xl font-black mb-1 ${isBuy ? "text-[#28A745]" : "text-[#DC3545]"}`}>
+          <div
+            className={`rounded-2xl p-4 sm:p-6 text-center ${isBuy ? "bg-[#28A745]/10 border border-[#28A745]/20" : "bg-[#DC3545]/10 border border-[#DC3545]/20"}`}
+          >
+            <p
+              className={`text-3xl sm:text-4xl font-black mb-1 ${isBuy ? "text-[#28A745]" : "text-[#DC3545]"}`}
+            >
               {result.verdict}
             </p>
             <p className="text-[#666666] text-sm">{productName}</p>
@@ -157,18 +177,32 @@ export default function DecidePage() {
           {/* Reasons 2-column */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div className="bg-[#28A745]/5 border border-[#28A745]/20 rounded-xl p-3">
-              <p className="text-[#28A745] text-xs font-semibold mb-2">사야 할 이유</p>
+              <p className="text-[#28A745] text-xs font-semibold mb-2">
+                사야 할 이유
+              </p>
               <ul className="flex flex-col gap-1">
                 {result.reasons_to_buy.map((r, i) => (
-                  <li key={i} className="text-xs text-[#1A1A1A] leading-relaxed">✓ {r}</li>
+                  <li
+                    key={i}
+                    className="text-xs text-[#1A1A1A] leading-relaxed"
+                  >
+                    ✓ {r}
+                  </li>
                 ))}
               </ul>
             </div>
             <div className="bg-[#DC3545]/5 border border-[#DC3545]/20 rounded-xl p-3">
-              <p className="text-[#DC3545] text-xs font-semibold mb-2">참아야 할 이유</p>
+              <p className="text-[#DC3545] text-xs font-semibold mb-2">
+                참아야 할 이유
+              </p>
               <ul className="flex flex-col gap-1">
                 {result.reasons_to_skip.map((r, i) => (
-                  <li key={i} className="text-xs text-[#1A1A1A] leading-relaxed">✗ {r}</li>
+                  <li
+                    key={i}
+                    className="text-xs text-[#1A1A1A] leading-relaxed"
+                  >
+                    ✗ {r}
+                  </li>
                 ))}
               </ul>
             </div>
@@ -176,7 +210,9 @@ export default function DecidePage() {
 
           {/* Comment */}
           <div className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-xl p-4">
-            <p className="text-sm text-[#1A1A1A]">💬 {result.verdict_comment}</p>
+            <p className="text-sm text-[#1A1A1A]">
+              💬 {result.verdict_comment}
+            </p>
           </div>
 
           {/* Alternatives */}
@@ -184,7 +220,10 @@ export default function DecidePage() {
             <p className="text-sm font-semibold mb-2">대안 상품</p>
             <div className="flex flex-col gap-3">
               {result.alternatives.map((alt, i) => (
-                <div key={i} className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-xl p-4 flex flex-col gap-2">
+                <div
+                  key={i}
+                  className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-xl p-4 flex flex-col gap-2"
+                >
                   <p className="font-medium text-sm">{alt.name}</p>
                   <p className="text-[#666666] text-xs">{alt.reason}</p>
                   <CoupangButton url={alt.coupangUrl} />
