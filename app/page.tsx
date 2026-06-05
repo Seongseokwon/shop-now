@@ -1,65 +1,55 @@
-import Image from "next/image";
+import Link from "next/link";
+
+const features = [
+  {
+    href: "/gift",
+    icon: "🎁",
+    title: "선물 추천기",
+    desc: "관계, 나이, 예산만 입력하면\nAI가 딱 맞는 선물을 추천해드려요",
+  },
+  {
+    href: "/decide",
+    icon: "🤔",
+    title: "살까말까 결정기",
+    desc: "고민되는 상품명만 입력하세요.\nAI가 사야 할 이유를 분석해드립니다",
+  },
+  {
+    href: "/budget",
+    icon: "📡",
+    title: "가성비 레이더",
+    desc: "카테고리와 예산을 선택하면\n이 가격대 최고의 상품을 찾아드립니다",
+  },
+];
 
 export default function Home() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+    <div className="flex flex-col items-center gap-8 py-8">
+      <div className="text-center">
+        <h1 className="text-3xl font-bold text-[#C00037] mb-2">쇼핑GPT</h1>
+        <p className="text-[#666666] text-sm leading-relaxed">
+          AI가 해결하는 쇼핑 고민<br />추천 상품은 쿠팡에서 바로 확인
+        </p>
+      </div>
+
+      <div className="w-full flex flex-col gap-4">
+        {features.map(({ href, icon, title, desc }) => (
+          <Link
+            key={href}
+            href={href}
+            className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-2xl p-5 flex items-start gap-4 hover:border-[#C00037] transition-colors"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+            <span className="text-3xl">{icon}</span>
+            <div>
+              <p className="font-semibold text-[#1A1A1A] mb-1">{title}</p>
+              <p className="text-[#666666] text-sm whitespace-pre-line">{desc}</p>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      <p className="text-[#999999] text-xs text-center">
+        파트너스 활동을 통해 수수료를 제공받을 수 있습니다
+      </p>
     </div>
   );
 }
