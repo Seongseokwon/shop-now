@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import openai from "@/lib/openai";
+import getOpenAI from "@/lib/openai";
 import { generateCoupangLink } from "@/lib/coupang";
 
 async function callOpenAI(relation: string, age: string, budget: string, gender: string) {
@@ -36,7 +36,7 @@ async function callOpenAI(relation: string, age: string, budget: string, gender:
 - 너무 일반적이지 않고 구체적인 상품명 사용
 - keyword는 쿠팡에서 바로 검색했을 때 나올 만한 키워드로`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: prompt }],
     response_format: { type: "json_object" },

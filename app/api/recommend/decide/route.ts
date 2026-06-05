@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import openai from "@/lib/openai";
+import getOpenAI from "@/lib/openai";
 import { generateCoupangLink } from "@/lib/coupang";
 
 async function callOpenAI(productName: string, price: string, reasons: string[]) {
@@ -29,7 +29,7 @@ async function callOpenAI(productName: string, price: string, reasons: string[])
 - alternatives는 반드시 2개 (더 저렴한 것 1개, 더 좋은 것 1개)
 - 솔직하고 명확하게, 중립적인 척 하지 말 것`;
 
-  const response = await openai.chat.completions.create({
+  const response = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
     messages: [{ role: "user", content: prompt }],
     response_format: { type: "json_object" },
