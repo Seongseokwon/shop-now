@@ -30,8 +30,8 @@ type BudgetItem = {
   rank: number;
   label: string;
   name: string;
-  price: string;
   keyword: string;
+  category: string;
   highlight: string;
   for_whom: string;
   coupangUrl: string;
@@ -157,9 +157,6 @@ export default function BudgetPage() {
                 </div>
                 <div>
                   <p className="font-semibold text-sm">{item.name}</p>
-                  <p className="text-[#C00037] text-sm font-medium mt-0.5">
-                    예상가격 {item.price}
-                  </p>
                 </div>
                 <div className="flex flex-col gap-1">
                   <p className="text-sm text-[#1A1A1A]">⭐ {item.highlight}</p>

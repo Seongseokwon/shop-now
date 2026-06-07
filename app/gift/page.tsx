@@ -24,7 +24,6 @@ type GiftItem = {
   rank: number;
   name: string;
   reason: string;
-  price: string;
   keyword: string;
   category: string;
   coupangUrl: string;
@@ -206,9 +205,6 @@ export default function GiftPage() {
                 </div>
                 <p className="text-[#666666] text-sm leading-relaxed">
                   {item.reason}
-                </p>
-                <p className="text-[#C00037] text-sm font-medium">
-                  예상가격 {item.price}
                 </p>
                 <CoupangButton url={item.coupangUrl} />
               </div>
