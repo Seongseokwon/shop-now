@@ -22,10 +22,9 @@ async function callOpenAI(
   "items": [
     {
       "rank": 1,
-      "name": "상품명 (구체적으로, 브랜드명 포함)",
+      "name": "상품명 (브랜드명 + 모델명 구체적으로)",
       "reason": "이 사람에게 이 선물이 좋은 이유 2줄",
-      "price": "가격대 (예: 32,000원~38,000원)",
-      "keyword": "쿠팡 검색용 키워드 (짧고 정확하게)",
+      "keyword": "쿠팡 검색 시 상위 노출될 만큼 구체적인 키워드",
       "category": "카테고리 (전자기기/뷰티/생활용품/패션/식품/스포츠 중 하나)"
     },
     { "rank": 2 },
@@ -37,9 +36,12 @@ async function callOpenAI(
 규칙:
 - 반드시 3개 추천
 - 예산 범위 내 상품만 추천
-- 가능하면 전자기기, 뷰티, 패션 카테고리 포함 (수수료가 높음)
-- 너무 일반적이지 않고 구체적인 상품명 사용
-- keyword는 쿠팡에서 바로 검색했을 때 나올 만한 키워드로`;
+- 가능하면 전자기기, 뷰티, 패션 카테고리 포함
+- 실제 판매 중인 완제품만 추천 (액세서리/케이스/충전기/소모품 제외)
+- 브랜드명 + 모델명이 포함된 구체적인 상품명 사용
+- 단종 상품 추천 금지
+- keyword는 쿠팡에서 검색했을 때 해당 상품이 상위 노출될 만큼 구체적으로
+- 가격 정보는 절대 생성하지 말 것`;
 
   const response = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
@@ -84,7 +86,6 @@ export async function POST(req: NextRequest) {
       rank: number;
       name: string;
       reason: string;
-      price: string;
       keyword: string;
       category: string;
     }[];
