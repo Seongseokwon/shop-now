@@ -39,10 +39,15 @@ export async function GET(req: NextRequest) {
   }
 
   const isBuy = verdict === "사세요";
-  const badgeColor = isBuy ? "#C00037" : "#555555";
-  const badgeBg = isBuy ? "#FFF0F3" : "#F5F5F5";
-  const scoreColor = isBuy ? "#C00037" : "#444444";
-  const badgeLabel = isBuy ? "사세요!" : "참으세요!";
+
+  const bgGradient = isBuy
+    ? "linear-gradient(135deg, #C00037 0%, #FF4D6D 100%)"
+    : "linear-gradient(135deg, #1C1C2E 0%, #3A3A6E 100%)";
+
+  const badgeLabel = isBuy ? "사세요! 🛒" : "참으세요! 🛑";
+  const badgeTextColor = isBuy ? "#C00037" : "#1C1C2E";
+
+  const fontSize = productName.length > 20 ? "48px" : "64px";
 
   return new ImageResponse(
     (
@@ -50,64 +55,58 @@ export async function GET(req: NextRequest) {
         style={{
           width: "1200px",
           height: "630px",
-          background: "white",
+          backgroundImage: bgGradient,
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
           justifyContent: "center",
           fontFamily: "sans-serif",
-          padding: "60px",
-          gap: "24px",
+          padding: "60px 80px",
+          gap: "28px",
+          position: "relative",
         }}
       >
         {/* 브랜드 */}
         <div
           style={{
             fontSize: "22px",
-            color: "#AAAAAA",
-            letterSpacing: "0.05em",
+            color: "rgba(255,255,255,0.65)",
             fontWeight: 600,
+            letterSpacing: "0.05em",
             display: "flex",
           }}
         >
           쇼핑GPT 살까말까
         </div>
 
-        {/* 상품명 + 가격 (flex row) */}
+        {/* 상품명 */}
         <div
           style={{
+            fontSize,
+            fontWeight: 900,
+            color: "white",
+            textAlign: "center",
+            lineHeight: 1.2,
+            maxWidth: "1000px",
             display: "flex",
-            flexDirection: "row",
-            alignItems: "baseline",
-            justifyContent: "center",
             flexWrap: "wrap",
-            gap: "12px",
-            maxWidth: "900px",
+            justifyContent: "center",
           }}
         >
-          <div
-            style={{
-              fontSize: productName.length > 20 ? "36px" : "44px",
-              fontWeight: 900,
-              color: "#1A1A1A",
-              textAlign: "center",
-              lineHeight: 1.25,
-              display: "flex",
-            }}
-          >
-            {productName}
-          </div>
+          {productName}
           {price ? (
-            <div
+            <span
               style={{
-                color: "#888888",
+                fontSize: "32px",
                 fontWeight: 500,
-                fontSize: "28px",
+                color: "rgba(255,255,255,0.65)",
+                marginLeft: "16px",
+                alignSelf: "flex-end",
                 display: "flex",
               }}
             >
               {price}
-            </div>
+            </span>
           ) : null}
         </div>
 
@@ -117,19 +116,18 @@ export async function GET(req: NextRequest) {
             display: "flex",
             flexDirection: "row",
             alignItems: "center",
-            gap: "32px",
+            gap: "40px",
             marginTop: "8px",
           }}
         >
           <div
             style={{
-              background: badgeBg,
-              color: badgeColor,
+              background: "white",
+              color: badgeTextColor,
               fontSize: "52px",
               fontWeight: 900,
-              padding: "16px 48px",
-              borderRadius: "20px",
-              border: `3px solid ${badgeColor}`,
+              padding: "16px 52px",
+              borderRadius: "24px",
               display: "flex",
             }}
           >
@@ -145,9 +143,9 @@ export async function GET(req: NextRequest) {
           >
             <div
               style={{
-                fontSize: "72px",
+                fontSize: "88px",
                 fontWeight: 900,
-                color: scoreColor,
+                color: "white",
                 lineHeight: 1,
                 display: "flex",
               }}
@@ -156,8 +154,8 @@ export async function GET(req: NextRequest) {
             </div>
             <div
               style={{
-                fontSize: "20px",
-                color: "#AAAAAA",
+                fontSize: "22px",
+                color: "rgba(255,255,255,0.55)",
                 fontWeight: 500,
                 display: "flex",
               }}
@@ -167,19 +165,37 @@ export async function GET(req: NextRequest) {
           </div>
         </div>
 
+        {/* CTA */}
+        <div
+          style={{
+            marginTop: "16px",
+            background: "rgba(255,255,255,0.15)",
+            color: "white",
+            fontSize: "24px",
+            fontWeight: 700,
+            padding: "14px 44px",
+            borderRadius: "40px",
+            border: "2px solid rgba(255,255,255,0.3)",
+            display: "flex",
+            letterSpacing: "0.02em",
+          }}
+        >
+          나도 AI에게 물어보기 →
+        </div>
+
         {/* 워터마크 */}
         <div
           style={{
             position: "absolute",
-            bottom: "36px",
+            bottom: "32px",
             right: "60px",
             fontSize: "18px",
-            color: "#DDDDDD",
+            color: "rgba(255,255,255,0.35)",
             fontWeight: 600,
             display: "flex",
           }}
         >
-          shop-now-ebon.vercel.app
+          쇼핑GPT
         </div>
       </div>
     ),
