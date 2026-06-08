@@ -3,6 +3,7 @@ import crypto from "crypto";
 const API_BASE = "https://api-gateway.coupang.com";
 
 export type CoupangProduct = {
+  name: string;
   price: number;
   image: string;
   link: string;
@@ -70,6 +71,7 @@ export async function searchCoupang(
     if (!item) return null;
 
     return {
+      name: item.productName ?? "",
       price: item.productPrice,
       image: item.productImage,
       link: item.productUrl,

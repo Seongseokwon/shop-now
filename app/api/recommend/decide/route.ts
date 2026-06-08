@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import getOpenAI from "@/lib/openai";
-import { generateCoupangLink } from "@/lib/coupang";
+import { searchCoupang, generateCoupangLink } from "@/lib/coupang";
 
 async function callOpenAI(
   productName: string,
@@ -83,10 +83,19 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const alternatives = parsed.alternatives.map((alt) => ({
-    ...alt,
-    coupangUrl: generateCoupangLink(alt.keyword),
-  }));
+  const alternatives = await Promise.all(
+    parsed.alternatives.map(async (alt) => {
+      const coupang = await searchCoupang(alt.keyword);
+      return {
+        ...alt,
+        coupangUrl: coupang?.link ?? generateCoupangLink(alt.keyword),
+        coupangName: coupang?.name ?? null,
+        coupangImage: coupang?.image ?? null,
+        coupangPrice: coupang?.price ?? null,
+        coupangRating: coupang?.rating ?? null,
+      };
+    })
+  );
 
   return NextResponse.json({ ...parsed, alternatives });
 }

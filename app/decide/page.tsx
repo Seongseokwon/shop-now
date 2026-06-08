@@ -15,7 +15,15 @@ const REASONS = [
   "충동구매일 것 같음",
 ];
 
-type Alternative = { name: string; reason: string; coupangUrl: string };
+type Alternative = {
+  name: string;
+  reason: string;
+  coupangUrl: string;
+  coupangName: string | null;
+  coupangImage: string | null;
+  coupangPrice: number | null;
+  coupangRating: number | null;
+};
 
 type Result = {
   verdict: string;
@@ -242,11 +250,49 @@ export default function DecidePage() {
                 {result.alternatives.map((alt, i) => (
                   <div
                     key={i}
-                    className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-xl p-4 flex flex-col gap-2"
+                    className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-xl p-4 flex flex-col gap-3"
                   >
-                    <p className="font-medium text-sm">{alt.name}</p>
-                    <p className="text-[#666666] text-xs">{alt.reason}</p>
-                    <CoupangButton url={alt.coupangUrl} productName={alt.name} />
+                    {/* 상품 정보 영역 */}
+                    <div className="flex gap-3 items-start">
+                      {/* 썸네일 */}
+                      {alt.coupangImage ? (
+                        <img
+                          src={alt.coupangImage}
+                          alt={alt.coupangName ?? alt.name}
+                          width={64}
+                          height={64}
+                          className="w-16 h-16 object-cover rounded-lg border border-[#E9ECEF] flex-shrink-0 bg-white"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 rounded-lg border border-[#E9ECEF] bg-white flex items-center justify-center flex-shrink-0 text-2xl">
+                          🛍️
+                        </div>
+                      )}
+                      {/* 텍스트 */}
+                      <div className="flex flex-col gap-1 min-w-0">
+                        <p className="font-semibold text-sm text-[#1A1A1A] leading-snug line-clamp-2">
+                          {alt.coupangName
+                            ? alt.coupangName.length > 40
+                              ? alt.coupangName.slice(0, 40) + "…"
+                              : alt.coupangName
+                            : alt.name}
+                        </p>
+                        <div className="flex items-center gap-2 flex-wrap">
+                          {alt.coupangPrice != null && (
+                            <span className="text-[#C00037] font-bold text-sm">
+                              {alt.coupangPrice.toLocaleString()}원
+                            </span>
+                          )}
+                          {alt.coupangRating != null && alt.coupangRating > 0 && (
+                            <span className="text-[#888] text-xs flex items-center gap-0.5">
+                              ⭐ {alt.coupangRating.toFixed(1)}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-[#666666] text-xs leading-relaxed">{alt.reason}</p>
+                      </div>
+                    </div>
+                    <CoupangButton url={alt.coupangUrl} productName={alt.coupangName ?? alt.name} />
                   </div>
                 ))}
               </div>
