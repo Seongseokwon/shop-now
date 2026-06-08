@@ -272,7 +272,7 @@ export default function DecidePage() {
           {/* 사세요 판정 시 해당 상품 직링 */}
           {result.verdict === "사세요" && result.directProduct && (
             <div className="bg-gradient-to-r from-[#fff8f0] to-white border border-[#F5C842]/40 rounded-2xl p-4 flex flex-col gap-3">
-              <p className="text-sm font-bold text-[#1A1A1A]">🛒 쿠팡에서 바로 구매하기</p>
+              <p className="text-sm font-bold text-[#1A1A1A]">🛒 최저가로 구매하기</p>
               <div className="flex gap-3 items-center">
                 {result.directProduct.coupangImage ? (
                   <img
@@ -313,11 +313,23 @@ export default function DecidePage() {
                 url={result.directProduct.coupangUrl}
                 productName={result.directProduct.coupangName ?? productName}
               />
+              <a
+                href={`https://search.shopping.naver.com/search/all?query=${encodeURIComponent(result.directProduct.coupangName ?? productName)}`}
+                target="_blank"
+                rel="noopener noreferrer nofollow"
+                className="block w-full text-center bg-white border border-[#E9ECEF] hover:bg-[#F8F9FA] text-[#555] font-medium py-2 px-4 rounded-lg transition-colors text-xs"
+              >
+                네이버쇼핑에서도 검색하기
+              </a>
             </div>
           )}
 
           {/* 배지 시스템 */}
           <JudgmentBadges newBadges={newBadges} />
+
+          <p className="text-[11px] text-[#AAAAAA] text-center leading-relaxed">
+            이 서비스는 쿠팡 파트너스 활동의 일환으로, 구매 시 일정 수수료를 제공받을 수 있습니다.
+          </p>
 
           {result.alternatives.length > 0 && (
             <div>
@@ -369,6 +381,14 @@ export default function DecidePage() {
                       </div>
                     </div>
                     <CoupangButton url={alt.coupangUrl} productName={alt.coupangName ?? alt.name} />
+                    <a
+                      href={`https://search.shopping.naver.com/search/all?query=${encodeURIComponent(alt.coupangName ?? alt.name)}`}
+                      target="_blank"
+                      rel="noopener noreferrer nofollow"
+                      className="block w-full text-center bg-white border border-[#E9ECEF] hover:bg-[#F8F9FA] text-[#555] font-medium py-2 px-4 rounded-lg transition-colors text-xs"
+                    >
+                      네이버쇼핑에서도 검색하기
+                    </a>
                   </div>
                 ))}
               </div>
