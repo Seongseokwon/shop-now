@@ -53,6 +53,11 @@ export default function JudgmentCard({
         <ScoreGauge score={score} />
       </div>
 
+      {/* NudgeCTA: 공유 랜딩에서는 fold 안에 노출되도록 결과 직후 배치 */}
+      {isSharedLanding && (
+        <NudgeCTA isSharedLanding={isSharedLanding} onReset={onReset} />
+      )}
+
       {/* Verdict comment */}
       <div className="bg-[#F8F9FA] border border-[#E9ECEF] rounded-xl p-4">
         <p className="text-sm text-[#1A1A1A] leading-relaxed">💬 {verdictComment}</p>
@@ -79,7 +84,10 @@ export default function JudgmentCard({
         price={price}
       />
 
-      <NudgeCTA isSharedLanding={isSharedLanding} onReset={onReset} />
+      {/* 일반 결정기 화면에서는 하단에 NudgeCTA 유지 */}
+      {!isSharedLanding && (
+        <NudgeCTA isSharedLanding={isSharedLanding} onReset={onReset} />
+      )}
 
       <p className="text-[#999999] text-xs text-center">
         파트너스 활동을 통해 수수료를 제공받을 수 있습니다
