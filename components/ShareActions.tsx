@@ -80,7 +80,7 @@ export default function ShareActions({ productName, verdict, score, shareUrl }: 
       content: {
         title,
         description,
-        imageUrl: `${baseUrl}/opengraph-image`,
+        imageUrl: `${baseUrl}/api/og?v=${encodeURIComponent(verdict)}&s=${score}&p=${encodeURIComponent(productName)}`,
         link: { mobileWebUrl: fullShareUrl, webUrl: fullShareUrl },
       },
       buttons: [
