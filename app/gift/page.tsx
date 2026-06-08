@@ -226,10 +226,12 @@ export default function GiftPage() {
                         {item.price.toLocaleString("ko-KR")}원
                       </p>
                     )}
-                    {item.rating !== null && item.reviewCount !== null && (
+                    {item.rating !== null && item.rating > 0 && (
                       <p className="text-xs text-[#888888]">
-                        ⭐ {item.rating.toFixed(1)} · 리뷰{" "}
-                        {item.reviewCount.toLocaleString("ko-KR")}개
+                        ⭐ {item.rating.toFixed(1)}
+                        {item.reviewCount
+                          ? ` · 리뷰 ${item.reviewCount.toLocaleString("ko-KR")}개`
+                          : ""}
                       </p>
                     )}
                   </div>

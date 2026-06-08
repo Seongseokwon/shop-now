@@ -33,7 +33,8 @@ async function callOpenAI(category: string, budget: string) {
 - 브랜드명 + 모델명이 포함된 구체적인 상품명 사용
 - 단종 상품 추천 금지
 - keyword는 쿠팡에서 검색했을 때 해당 상품이 상위 노출될 만큼 구체적으로
-- 가격 정보는 절대 생성하지 말 것`;
+- 가격 정보는 절대 생성하지 말 것
+- 모든 항목(가성비 최고/무난한 선택/프리미엄 픽)은 반드시 ${budget} 이하 가격대 상품이어야 함 (예산 초과 절대 금지)`;
 
   const response = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
