@@ -6,6 +6,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import MultiPillGroup from "@/components/MultiPillGroup";
 import JudgmentCard from "@/components/JudgmentCard";
 import { encodeResult } from "@/lib/resultUrl";
+import { saveToHistory } from "@/components/DecideHistory";
 
 const REASONS = [
   "가격이 비쌈",
@@ -70,7 +71,7 @@ export default function DecidePage() {
       setResult(data);
 
       try {
-        const encoded = encodeResult({
+        const payload = {
           v: data.verdict,
           s: data.score,
           p: productName,
@@ -79,8 +80,10 @@ export default function DecidePage() {
           rs: data.reasons_to_skip,
           vc: data.verdict_comment,
           t: Math.floor(Date.now() / 1000),
-        });
+        };
+        const encoded = encodeResult(payload);
         setShareUrl(`/result?d=${encoded}`);
+        saveToHistory(payload);
       } catch {
         setShareUrl("/decide");
       }
