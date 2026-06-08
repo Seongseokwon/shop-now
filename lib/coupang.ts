@@ -10,14 +10,33 @@ export type CoupangProduct = {
   reviewCount: number;
 };
 
-function hmacSignature(
+function generateHmac(
   method: string,
-  path: string,
-  datetime: string,
-  secretKey: string
+  urlPath: string,
+  secretKey: string,
+  accessKey: string
 ): string {
-  const message = method + path + datetime;
-  return crypto.createHmac("sha256", secretKey).update(message).digest("hex");
+  const [path, query = ""] = urlPath.split("?");
+
+  // 공식 문서 포맷: YYMMDDTHHmmssZ
+  const now = new Date();
+  const pad = (n: number) => String(n).padStart(2, "0");
+  const yy = String(now.getUTCFullYear()).slice(2);
+  const MM = pad(now.getUTCMonth() + 1);
+  const dd = pad(now.getUTCDate());
+  const HH = pad(now.getUTCHours());
+  const mm = pad(now.getUTCMinutes());
+  const ss = pad(now.getUTCSeconds());
+  const datetime = `${yy}${MM}${dd}T${HH}${mm}${ss}Z`;
+
+  // 공식 문서 순서: datetime + method + path + query
+  const message = datetime + method + path + query;
+  const signature = crypto
+    .createHmac("sha256", secretKey)
+    .update(message)
+    .digest("hex");
+
+  return `CEA algorithm=HmacSHA256, access-key=${accessKey}, signed-date=${datetime}, signature=${signature}`;
 }
 
 export async function searchCoupang(
@@ -33,27 +52,18 @@ export async function searchCoupang(
   const query = `keyword=${encodeURIComponent(keyword)}&limit=1`;
   const urlWithQuery = `${path}?${query}`;
 
-  // yyMMddHHmmss 형식
-  const now = new Date();
-  const datetime = now
-    .toISOString()
-    .replace(/[-:T]/g, "")
-    .slice(2, 14);
-
-  const signature = hmacSignature("GET", urlWithQuery, datetime, secretKey);
-
   try {
+    const authorization = generateHmac("GET", urlWithQuery, secretKey, accessKey);
+
     const res = await fetch(`${API_BASE}${urlWithQuery}`, {
       headers: {
-        Authorization: `CEA algorithm=HmacSHA256, access-key=${accessKey}, signed-date=${datetime}, signature=${signature}`,
+        Authorization: authorization,
         "Content-Type": "application/json",
       },
       cache: "no-store",
     });
 
     const json = await res.json();
-    console.log("[coupang] status:", res.status, "body:", JSON.stringify(json).slice(0, 300));
-
     if (!res.ok) return null;
 
     const item = json?.data?.productData?.[0];
