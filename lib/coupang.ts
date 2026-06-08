@@ -54,6 +54,35 @@ function isAccessory(productName: string): boolean {
   return ACCESSORY_KEYWORDS.some((kw) => lower.includes(kw.toLowerCase()));
 }
 
+async function convertToDeeplink(productUrl: string): Promise<string> {
+  const accessKey = process.env.COUPANG_ACCESS_KEY;
+  const secretKey = process.env.COUPANG_SECRET_KEY;
+  if (!accessKey || !secretKey) return productUrl;
+
+  const path = "/v2/providers/affiliate_open_api/apis/openapi/v1/deeplink";
+  const authorization = generateHmac("POST", path, secretKey, accessKey);
+
+  try {
+    const res = await fetch(`${API_BASE}${path}`, {
+      method: "POST",
+      headers: {
+        Authorization: authorization,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ coupangUrls: [productUrl] }),
+      cache: "no-store",
+    });
+
+    if (!res.ok) return productUrl;
+
+    const json = await res.json();
+    const item = json?.data?.[0];
+    return item?.shortenUrl ?? item?.landingUrl ?? productUrl;
+  } catch {
+    return productUrl;
+  }
+}
+
 export async function searchCoupang(
   keyword: string,
   options: { filterAccessories?: boolean } = {}
@@ -95,11 +124,13 @@ export async function searchCoupang(
 
     if (!item) return null;
 
+    const deeplink = await convertToDeeplink(item.productUrl as string);
+
     return {
       name: String(item.productName ?? ""),
       price: item.productPrice as number,
       image: item.productImage as string,
-      link: item.productUrl as string,
+      link: deeplink,
       rating: (item.productRating as number) ?? 0,
       reviewCount: (item.productReviewCount as number) ?? 0,
     };
