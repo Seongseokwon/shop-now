@@ -97,19 +97,34 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const alternatives = await Promise.all(
-    parsed.alternatives.map(async (alt) => {
-      const coupang = await searchCoupang(alt.keyword, { filterAccessories: true });
-      return {
-        ...alt,
-        coupangUrl: coupang?.link ?? generateCoupangLink(alt.keyword),
-        coupangName: coupang?.name ?? null,
-        coupangImage: coupang?.image ?? null,
-        coupangPrice: coupang?.price ?? null,
-        coupangRating: coupang?.rating ?? null,
-      };
-    })
-  );
+  const [alternatives, directCoupang] = await Promise.all([
+    Promise.all(
+      parsed.alternatives.map(async (alt) => {
+        const coupang = await searchCoupang(alt.keyword, { filterAccessories: true });
+        return {
+          ...alt,
+          coupangUrl: coupang?.link ?? generateCoupangLink(alt.keyword),
+          coupangName: coupang?.name ?? null,
+          coupangImage: coupang?.image ?? null,
+          coupangPrice: coupang?.price ?? null,
+          coupangRating: coupang?.rating ?? null,
+        };
+      })
+    ),
+    parsed.verdict === "사세요"
+      ? searchCoupang(productName, { filterAccessories: true })
+      : Promise.resolve(null),
+  ]);
 
-  return NextResponse.json({ ...parsed, alternatives });
+  const directProduct = directCoupang
+    ? {
+        coupangUrl: directCoupang.link,
+        coupangName: directCoupang.name,
+        coupangImage: directCoupang.image,
+        coupangPrice: directCoupang.price,
+        coupangRating: directCoupang.rating,
+      }
+    : null;
+
+  return NextResponse.json({ ...parsed, alternatives, directProduct });
 }

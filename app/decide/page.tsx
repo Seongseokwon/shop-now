@@ -27,6 +27,14 @@ type Alternative = {
   coupangRating: number | null;
 };
 
+type DirectProduct = {
+  coupangUrl: string;
+  coupangName: string | null;
+  coupangImage: string | null;
+  coupangPrice: number | null;
+  coupangRating: number | null;
+};
+
 type Result = {
   verdict: string;
   score: number;
@@ -34,6 +42,7 @@ type Result = {
   reasons_to_skip: string[];
   verdict_comment: string;
   alternatives: Alternative[];
+  directProduct: DirectProduct | null;
 };
 
 export default function DecidePage() {
@@ -259,6 +268,53 @@ export default function DecidePage() {
             shareUrl={shareUrl}
             onReset={reset}
           />
+
+          {/* 사세요 판정 시 해당 상품 직링 */}
+          {result.verdict === "사세요" && result.directProduct && (
+            <div className="bg-gradient-to-r from-[#fff8f0] to-white border border-[#F5C842]/40 rounded-2xl p-4 flex flex-col gap-3">
+              <p className="text-sm font-bold text-[#1A1A1A]">🛒 쿠팡에서 바로 구매하기</p>
+              <div className="flex gap-3 items-center">
+                {result.directProduct.coupangImage ? (
+                  <img
+                    src={result.directProduct.coupangImage}
+                    alt={result.directProduct.coupangName ?? productName}
+                    width={56}
+                    height={56}
+                    className="w-14 h-14 object-cover rounded-lg border border-[#E9ECEF] bg-white flex-shrink-0"
+                  />
+                ) : (
+                  <div className="w-14 h-14 rounded-lg border border-[#E9ECEF] bg-white flex items-center justify-center flex-shrink-0 text-2xl">
+                    🛍️
+                  </div>
+                )}
+                <div className="flex flex-col gap-0.5 min-w-0">
+                  <p className="font-semibold text-sm text-[#1A1A1A] leading-snug line-clamp-2">
+                    {result.directProduct.coupangName
+                      ? result.directProduct.coupangName.length > 40
+                        ? result.directProduct.coupangName.slice(0, 40) + "…"
+                        : result.directProduct.coupangName
+                      : productName}
+                  </p>
+                  <div className="flex items-center gap-2">
+                    {result.directProduct.coupangPrice != null && (
+                      <span className="text-[#C00037] font-bold text-sm">
+                        {result.directProduct.coupangPrice.toLocaleString()}원
+                      </span>
+                    )}
+                    {result.directProduct.coupangRating != null && result.directProduct.coupangRating > 0 && (
+                      <span className="text-[#888] text-xs">
+                        ⭐ {result.directProduct.coupangRating.toFixed(1)}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              </div>
+              <CoupangButton
+                url={result.directProduct.coupangUrl}
+                productName={result.directProduct.coupangName ?? productName}
+              />
+            </div>
+          )}
 
           {/* 배지 시스템 */}
           <JudgmentBadges newBadges={newBadges} />
