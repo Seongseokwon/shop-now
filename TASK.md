@@ -105,12 +105,14 @@
 
 ### Phase 3 — 데이터 기반 개선 (3-4주차)
 
-- [ ] **공유 이벤트 트래킹**
-  - `share_kakao`, `share_copy` 이벤트 → Vercel Analytics / Posthog
-- [ ] **동적 OG 이미지 (Vercel OG)**
+- [x] **공유 이벤트 트래킹** — 이미 구현됨 (ShareActions.tsx에 track() 적용)
+  - `share_kakao`, `share_copy` 이벤트 → Vercel Analytics
+- [x] **동적 OG 이미지 (Vercel OG)** — BUG-003에서 완료 (2026-06-08)
   - 판정 카드 스타일 OG 이미지 동적 생성 (`app/api/og/route.tsx`)
-- [ ] **판정 배지 시스템 (localStorage)**
-  - 누적 판정 횟수별: "절약왕 🏆", "충동구매 위기탈출 🛡️"
+- [x] **판정 배지 시스템 (localStorage)** (2026-06-08)
+  - `lib/badges.ts`: 배지 정의 5종 + 누적 통계(decide_stats) 관리
+  - `components/JudgmentBadges.tsx`: 획득/잠긴 배지 그리드 + 신규 획득 토스트
+  - 배지: 🎯첫판정 / 🛡️충동구매위기탈출 / 🧠신중한소비자 / 🏆절약왕 / 🔍쇼핑분석가
 
 ---
 
