@@ -3,6 +3,7 @@ import { Geist } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import Navbar from "@/components/Navbar";
+import FeedbackButton from "@/components/FeedbackButton";
 import "./globals.css";
 
 const geist = Geist({ subsets: ["latin"] });
@@ -57,6 +58,7 @@ export default function RootLayout({
         />
         <Navbar />
         <main className="max-w-[480px] mx-auto px-4 py-6">{children}</main>
+        <FeedbackButton />
         <Analytics />
       </body>
     </html>
