@@ -226,7 +226,7 @@ export default function DecidePage() {
                 >
                   <p className="font-medium text-sm">{alt.name}</p>
                   <p className="text-[#666666] text-xs">{alt.reason}</p>
-                  <CoupangButton url={alt.coupangUrl} />
+                  <CoupangButton url={alt.coupangUrl} productName={alt.name} />
                 </div>
               ))}
             </div>

@@ -190,7 +190,7 @@ export default function BudgetPage() {
                   <p className="text-sm text-[#1A1A1A]">⭐ {item.highlight}</p>
                   <p className="text-xs text-[#666666]">👤 {item.for_whom}</p>
                 </div>
-                <CoupangButton url={item.coupangUrl} />
+                <CoupangButton url={item.coupangUrl} productName={item.name} />
               </div>
             ))}
           </div>

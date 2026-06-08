@@ -239,7 +239,7 @@ export default function GiftPage() {
                 <p className="text-[#666666] text-sm leading-relaxed">
                   {item.reason}
                 </p>
-                <CoupangButton url={item.coupangUrl} />
+                <CoupangButton url={item.coupangUrl} productName={item.name} />
               </div>
             ))}
           </div>
