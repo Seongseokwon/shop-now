@@ -240,6 +240,14 @@ export default function GiftPage() {
                   {item.reason}
                 </p>
                 <CoupangButton url={item.coupangUrl} productName={item.name} />
+                <a
+                  href={`https://search.shopping.naver.com/search/all?query=${encodeURIComponent(item.name)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="block w-full text-center text-sm text-[#03C75A] border border-[#03C75A]/30 rounded-xl py-2.5 hover:bg-[#03C75A]/5 transition-colors"
+                >
+                  네이버쇼핑에서도 검색하기
+                </a>
               </div>
             ))}
           </div>
