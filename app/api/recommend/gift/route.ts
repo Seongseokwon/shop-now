@@ -1,20 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
 import getOpenAI from "@/lib/openai";
-import { generateCoupangLink } from "@/lib/coupang";
+import { generateCoupangLink, searchCoupang } from "@/lib/coupang";
 
 async function callOpenAI(
-  relation: string,
-  age: string,
+  category: string,
   budget: string,
-  gender: string
+  purpose: string,
+  demographic: string
 ) {
-  const prompt = `당신은 쇼핑 전문가입니다. 사용자의 선물 조건에 맞는 상품을 추천해주세요.
+  const prompt = `당신은 쇼핑 전문가입니다. 사용자의 조건에 맞는 상품을 추천해주세요.
 
 조건:
-- 관계: ${relation}
-- 나이대: ${age}
+- 카테고리: ${category}
 - 예산: ${budget}
-- 성별: ${gender}
+- 사용 목적: ${purpose}
+- 성별/연령대: ${demographic || "상관없음"}
 
 다음 JSON 형식으로만 응답하세요. 다른 텍스트는 절대 포함하지 마세요:
 
@@ -23,9 +23,9 @@ async function callOpenAI(
     {
       "rank": 1,
       "name": "상품명 (브랜드명 + 모델명 구체적으로)",
-      "reason": "이 사람에게 이 선물이 좋은 이유 2줄",
+      "reason": "이 조건에 이 상품이 좋은 이유 2줄",
       "keyword": "쿠팡 검색 시 상위 노출될 만큼 구체적인 키워드",
-      "category": "카테고리 (전자기기/뷰티/생활용품/패션/식품/스포츠 중 하나)"
+      "category": "카테고리명"
     },
     { "rank": 2 },
     { "rank": 3 }
@@ -36,7 +36,6 @@ async function callOpenAI(
 규칙:
 - 반드시 3개 추천
 - 예산 범위 내 상품만 추천
-- 가능하면 전자기기, 뷰티, 패션 카테고리 포함
 - 실제 판매 중인 완제품만 추천 (액세서리/케이스/충전기/소모품 제외)
 - 브랜드명 + 모델명이 포함된 구체적인 상품명 사용
 - 단종 상품 추천 금지
@@ -53,17 +52,15 @@ async function callOpenAI(
 }
 
 export async function POST(req: NextRequest) {
-  const { relation, age, budget, gender } = await req.json();
+  const { category, budget, purpose, demographic } = await req.json();
 
   if (
-    typeof relation !== "string" ||
-    !relation ||
-    typeof age !== "string" ||
-    !age ||
+    typeof category !== "string" ||
+    !category ||
     typeof budget !== "string" ||
     !budget ||
-    typeof gender !== "string" ||
-    !gender
+    typeof purpose !== "string" ||
+    !purpose
   ) {
     return NextResponse.json(
       { error: "필수 항목이 누락되었습니다." },
@@ -73,7 +70,12 @@ export async function POST(req: NextRequest) {
 
   let raw: string;
   try {
-    raw = await callOpenAI(relation, age, budget, gender);
+    raw = await callOpenAI(
+      category,
+      budget,
+      purpose,
+      typeof demographic === "string" ? demographic : ""
+    );
   } catch {
     return NextResponse.json(
       { error: "AI 호출 중 오류가 발생했습니다." },
@@ -100,10 +102,24 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const items = parsed.items.map((item) => ({
-    ...item,
-    coupangUrl: generateCoupangLink(item.keyword),
-  }));
+  const coupangResults = await Promise.allSettled(
+    parsed.items.map((item) => searchCoupang(item.keyword))
+  );
+
+  const items = parsed.items.map((item, i) => {
+    const coupang =
+      coupangResults[i].status === "fulfilled"
+        ? coupangResults[i].value
+        : null;
+    return {
+      ...item,
+      coupangUrl: coupang?.link ?? generateCoupangLink(item.keyword),
+      price: coupang?.price ?? null,
+      image: coupang?.image ?? null,
+      rating: coupang?.rating ?? null,
+      reviewCount: coupang?.reviewCount ?? null,
+    };
+  });
 
   return NextResponse.json({ items, comment: parsed.comment });
 }

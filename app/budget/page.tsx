@@ -35,6 +35,10 @@ type BudgetItem = {
   highlight: string;
   for_whom: string;
   coupangUrl: string;
+  price: number | null;
+  image: string | null;
+  rating: number | null;
+  reviewCount: number | null;
 };
 
 type Result = {
@@ -155,8 +159,30 @@ export default function BudgetPage() {
                     {item.label}
                   </span>
                 </div>
-                <div>
-                  <p className="font-semibold text-sm">{item.name}</p>
+                <div className="flex items-start gap-3">
+                  {item.image && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      className="w-16 h-16 object-contain rounded-lg bg-white border border-[#E9ECEF] flex-shrink-0"
+                    />
+                  )}
+                  <div className="flex flex-col gap-1 min-w-0">
+                    <p className="font-semibold text-sm">{item.name}</p>
+                    {item.price !== null && (
+                      <p className="text-[#C00037] font-bold text-base">
+                        실시간 최저가{" "}
+                        {item.price.toLocaleString("ko-KR")}원
+                      </p>
+                    )}
+                    {item.rating !== null && item.reviewCount !== null && (
+                      <p className="text-xs text-[#888888]">
+                        ⭐ {item.rating.toFixed(1)} · 리뷰{" "}
+                        {item.reviewCount.toLocaleString("ko-KR")}개
+                      </p>
+                    )}
+                  </div>
                 </div>
                 <div className="flex flex-col gap-1">
                   <p className="text-sm text-[#1A1A1A]">⭐ {item.highlight}</p>

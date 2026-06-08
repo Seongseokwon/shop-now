@@ -35,14 +35,14 @@ const features = [
         />
       </svg>
     ),
-    title: "선물 추천기",
-    emoji: "🎁",
-    tagline: "연인·부모님·친구 선물 추천",
-    desc: "관계·나이·예산만 입력하면 실패 없는 선물 TOP 3",
+    title: "상품 추천기",
+    emoji: "🛍️",
+    tagline: "조건별 맞춤 상품 추천",
+    desc: "카테고리·예산·목적 선택하면 AI가 딱 맞는 상품 TOP 3",
     color: "from-red-50 to-white",
     accentColor: "#C00037",
     borderHover: "hover:border-[#C00037]",
-    ctaLabel: "선물 추천받기",
+    ctaLabel: "상품 추천받기",
   },
   {
     href: "/decide",

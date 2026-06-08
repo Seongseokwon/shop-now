@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import Logo from "./Logo";
 
 const links = [
-  { href: "/gift", label: "선물추천", shortLabel: "🎁 선물" },
+  { href: "/gift", label: "상품추천", shortLabel: "🛍️ 상품" },
   { href: "/decide", label: "살까말까", shortLabel: "🤔 살까?" },
   { href: "/budget", label: "가성비레이더", shortLabel: "💸 가성비" },
 ];

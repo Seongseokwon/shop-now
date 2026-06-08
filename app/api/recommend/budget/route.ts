@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import getOpenAI from "@/lib/openai";
-import { generateCoupangLink } from "@/lib/coupang";
+import { generateCoupangLink, searchCoupang } from "@/lib/coupang";
 
 async function callOpenAI(category: string, budget: string) {
   const prompt = `당신은 가성비 전문 리뷰어입니다. 주어진 카테고리와 예산에서 최고의 선택을 추천해주세요.
@@ -91,10 +91,24 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  const items = parsed.items.map((item) => ({
-    ...item,
-    coupangUrl: generateCoupangLink(item.keyword),
-  }));
+  const coupangResults = await Promise.allSettled(
+    parsed.items.map((item) => searchCoupang(item.keyword))
+  );
+
+  const items = parsed.items.map((item, i) => {
+    const coupang =
+      coupangResults[i].status === "fulfilled"
+        ? coupangResults[i].value
+        : null;
+    return {
+      ...item,
+      coupangUrl: coupang?.link ?? generateCoupangLink(item.keyword),
+      price: coupang?.price ?? null,
+      image: coupang?.image ?? null,
+      rating: coupang?.rating ?? null,
+      reviewCount: coupang?.reviewCount ?? null,
+    };
+  });
 
   return NextResponse.json({ ...parsed, items });
 }
