@@ -29,6 +29,7 @@ export default function DecidePage() {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
   const [reasons, setReasons] = useState<string[]>([]);
+  const [customReason, setCustomReason] = useState("");
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<Result | null>(null);
   const [shareUrl, setShareUrl] = useState<string>("");
@@ -50,7 +51,13 @@ export default function DecidePage() {
       const res = await fetch("/api/recommend/decide", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ productName, price, reasons }),
+        body: JSON.stringify({
+          productName,
+          price,
+          reasons: customReason.trim()
+            ? [...reasons, customReason.trim()]
+            : reasons,
+        }),
       });
 
       const data = await res.json();
@@ -88,6 +95,13 @@ export default function DecidePage() {
     setResult(null);
     setShareUrl("");
     setError("");
+  }
+
+  function addCustomReason() {
+    const trimmed = customReason.trim();
+    if (!trimmed || reasons.includes(trimmed)) return;
+    setReasons((prev) => [...prev, trimmed]);
+    setCustomReason("");
   }
 
   return (
@@ -137,6 +151,52 @@ export default function DecidePage() {
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">고민 이유 (복수 선택)</span>
             <MultiPillGroup options={REASONS} values={reasons} onChange={toggleReason} />
+            {/* 직접 입력한 커스텀 이유 태그 */}
+            {reasons.filter((r) => !REASONS.includes(r)).length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {reasons
+                  .filter((r) => !REASONS.includes(r))
+                  .map((r) => (
+                    <span
+                      key={r}
+                      className="flex items-center gap-1 px-3 py-1.5 rounded-full text-sm font-medium bg-[#C00037] text-white border border-[#C00037]"
+                    >
+                      {r}
+                      <button
+                        type="button"
+                        onClick={() => toggleReason(r)}
+                        className="ml-0.5 hover:opacity-70 transition-opacity"
+                        aria-label={`${r} 삭제`}
+                      >
+                        ×
+                      </button>
+                    </span>
+                  ))}
+              </div>
+            )}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={customReason}
+                onChange={(e) => setCustomReason(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    addCustomReason();
+                  }
+                }}
+                placeholder="직접 입력 (예: 비슷한 게 이미 있음)"
+                className="flex-1 border border-[#E9ECEF] rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-[#C00037] focus:ring-2 focus:ring-[#C00037]/20"
+              />
+              <button
+                type="button"
+                onClick={addCustomReason}
+                disabled={!customReason.trim()}
+                className="px-3 py-2 rounded-lg border border-[#E9ECEF] text-sm text-[#C00037] font-medium hover:border-[#C00037] hover:bg-[#C00037]/5 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                추가
+              </button>
+            </div>
           </div>
 
           {error && (
