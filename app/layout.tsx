@@ -12,7 +12,7 @@ const BASE_URL =
 export const metadata: Metadata = {
   title: "Shop Now — AI 쇼핑 도우미",
   description:
-    "선물 추천, 살까말까 결정, 가성비 레이더. AI가 당신의 쇼핑 고민을 해결해드립니다.",
+    "상품 추천, 살까말까 결정, 가성비 레이더. AI가 당신의 쇼핑 고민을 해결해드립니다.",
   icons: {
     icon: "/favicon.svg",
   },

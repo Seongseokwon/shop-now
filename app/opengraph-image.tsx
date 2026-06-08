@@ -210,17 +210,17 @@ export default function OgImage() {
               padding: "20px 28px",
             }}
           >
-            <span style={{ fontSize: "44px" }}>🎁</span>
+            <span style={{ fontSize: "44px" }}>🛍️</span>
             <div
               style={{ display: "flex", flexDirection: "column", gap: "4px" }}
             >
               <span
                 style={{ fontSize: "24px", fontWeight: 800, color: "#1A1A1A" }}
               >
-                선물 추천기
+                상품 추천기
               </span>
               <span style={{ fontSize: "16px", color: "#666666" }}>
-                관계 · 나이 · 예산 → 실패 없는 선물 TOP 3
+                카테고리 · 예산 · 목적 → 딱 맞는 상품 TOP 3
               </span>
             </div>
           </div>
