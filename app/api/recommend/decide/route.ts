@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import getOpenAI from "@/lib/openai";
 import { searchCoupang, generateCoupangLink } from "@/lib/coupang";
+import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 
 async function callOpenAI(
   productName: string,
@@ -49,6 +50,13 @@ async function callOpenAI(
 }
 
 export async function POST(req: NextRequest) {
+  if (!checkRateLimit(getClientIp(req))) {
+    return NextResponse.json(
+      { error: "요청이 너무 많습니다. 1분 후 다시 시도해주세요." },
+      { status: 429 }
+    );
+  }
+
   const { productName, price, reasons } = await req.json();
 
   if (typeof productName !== "string" || !productName.trim()) {

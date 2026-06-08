@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import getOpenAI from "@/lib/openai";
 import { generateCoupangLink, searchCoupang } from "@/lib/coupang";
+import { checkRateLimit, getClientIp } from "@/lib/rateLimit";
 
 async function callOpenAI(category: string, budget: string) {
   const prompt = `당신은 가성비 전문 리뷰어입니다. 주어진 카테고리와 예산에서 최고의 선택을 추천해주세요.
@@ -46,6 +47,13 @@ async function callOpenAI(category: string, budget: string) {
 }
 
 export async function POST(req: NextRequest) {
+  if (!checkRateLimit(getClientIp(req))) {
+    return NextResponse.json(
+      { error: "요청이 너무 많습니다. 1분 후 다시 시도해주세요." },
+      { status: 429 }
+    );
+  }
+
   const { category, budget } = await req.json();
 
   if (
