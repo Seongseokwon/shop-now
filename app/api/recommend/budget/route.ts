@@ -47,7 +47,7 @@ async function callOpenAI(category: string, budget: string) {
 }
 
 export async function POST(req: NextRequest) {
-  if (!checkRateLimit(getClientIp(req))) {
+  if (!(await checkRateLimit(getClientIp(req)))) {
     return NextResponse.json(
       { error: "요청이 너무 많습니다. 1분 후 다시 시도해주세요." },
       { status: 429 }
