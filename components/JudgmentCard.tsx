@@ -76,6 +76,7 @@ export default function JudgmentCard({
         verdict={verdict}
         score={score}
         shareUrl={shareUrl}
+        price={price}
       />
 
       <NudgeCTA isSharedLanding={isSharedLanding} onReset={onReset} />

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import CoupangButton from "@/components/CoupangButton";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MultiPillGroup from "@/components/MultiPillGroup";
@@ -39,6 +39,14 @@ type Result = {
 export default function DecidePage() {
   const [productName, setProductName] = useState("");
   const [price, setPrice] = useState("");
+
+  useEffect(() => {
+    const prefill = sessionStorage.getItem("decide_prefill");
+    if (prefill) {
+      setProductName(prefill);
+      sessionStorage.removeItem("decide_prefill");
+    }
+  }, []);
   const [reasons, setReasons] = useState<string[]>([]);
   const [customReason, setCustomReason] = useState("");
   const [loading, setLoading] = useState(false);

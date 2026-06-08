@@ -18,6 +18,7 @@ interface ShareActionsProps {
   verdict: string;
   score: number;
   shareUrl: string;
+  price?: string;
 }
 
 function KakaoIcon() {
@@ -40,14 +41,19 @@ function LinkIcon() {
   );
 }
 
-export default function ShareActions({ productName, verdict, score, shareUrl }: ShareActionsProps) {
+export default function ShareActions({ productName, verdict, score, shareUrl, price }: ShareActionsProps) {
   const [sdkReady, setSdkReady] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://shop-now-ebon.vercel.app";
   const fullShareUrl = shareUrl.startsWith("http") ? shareUrl : `${baseUrl}${shareUrl}`;
   const title = `${productName} — GPT 판정: ${verdict}! (${score}점)`;
-  const description = `${productName} 살까말까 GPT한테 물어봤더니… ${verdict}이래`;
+  const description =
+    verdict === "참으세요" && price
+      ? `나 오늘 ${productName} 참았다 — AI 덕분에 ${price} 절약 🎉`
+      : verdict === "참으세요"
+      ? `나 오늘 ${productName} 안 샀다 — AI가 참으라고 했거든 🛡️`
+      : `${productName} 살까말까 GPT한테 물어봤더니… ${verdict}이래 (${score}점)`;
 
   useEffect(() => {
     const key = process.env.NEXT_PUBLIC_KAKAO_APP_KEY;
