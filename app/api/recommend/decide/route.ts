@@ -31,7 +31,13 @@ async function callOpenAI(
 - score는 0~100 (구매 추천 점수)
 - verdict는 반드시 "사세요" 또는 "참으세요" 중 하나
 - alternatives는 반드시 2개 (더 저렴한 것 1개, 더 좋은 것 1개)
-- 솔직하고 명확하게, 중립적인 척 하지 말 것`;
+- 솔직하고 명확하게, 중립적인 척 하지 말 것
+
+대안 상품 엄격 규칙 (반드시 준수):
+- 대안은 반드시 원래 상품과 동일한 기능·카테고리의 대체 상품이어야 함 (예: 이어폰 → 이어폰)
+- 케이스, 커버, 파우치, 충전기, 케이블, 이어팁 등 악세서리·부속품은 절대 추천 금지
+- keyword는 상품 본품을 직접 검색할 수 있는 구체적인 모델명·브랜드명으로 작성
+- keyword에 "케이스", "커버", "파우치", "충전", "케이블", "tip", "case", "cover", "accessory" 등 포함 금지`;
 
   const response = await getOpenAI().chat.completions.create({
     model: "gpt-4o-mini",
@@ -85,7 +91,7 @@ export async function POST(req: NextRequest) {
 
   const alternatives = await Promise.all(
     parsed.alternatives.map(async (alt) => {
-      const coupang = await searchCoupang(alt.keyword);
+      const coupang = await searchCoupang(alt.keyword, { filterAccessories: true });
       return {
         ...alt,
         coupangUrl: coupang?.link ?? generateCoupangLink(alt.keyword),
