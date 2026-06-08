@@ -1,8 +1,8 @@
 # Project Hand-off: shopping-gpt (Shop Now)
 
-**Last updated:** 2026-06-08  
+**Last updated:** 2026-06-08 (2차)  
 **Branch:** master  
-**Last commit:** `0dc651c` — docs(task): Trust Expansion Strategy 반영 8차 재정렬  
+**Last commit:** `84740dc` — docs(task): P0-6 완료 처리  
 **Production URL:** https://shop-now-ebon.vercel.app
 
 ---
@@ -98,8 +98,32 @@ lib/
 | IP 기반 Rate Limiting (Upstash Redis) | ✅ |
 | 플로팅 피드백 버튼 | ✅ |
 | CTA 중립화 ("최저가 확인하기") | ✅ |
-| 네이버쇼핑 비교 링크 (deeplink) | ✅ |
+| 네이버쇼핑 비교 링크 (deeplink) — decide·gift·budget 전체 | ✅ |
 | 쿠팡 파트너스 수수료 안내 문구 | ✅ |
+| 공유 랜딩 NudgeCTA fold 안 노출 (ScoreGauge 직후 배치) | ✅ |
+| README 시인성 개선 + 실제 서비스 스크린샷 4장 | ✅ |
+
+---
+
+## 오늘 작업 내역 (2026-06-08 2차) — P0 Dev 전체 완료
+
+### 1. gift·budget 네이버쇼핑 비교 링크 추가 (커밋 `612a377`)
+
+- 기존: decide 페이지만 적용돼 있었음
+- `gift/page.tsx`, `budget/page.tsx` 결과 카드 각각에 "네이버쇼핑에서도 검색하기" deeplink 추가
+- 이로써 모든 결과 페이지(decide·gift·budget)에 동일하게 적용 완료
+
+### 2. 공유 랜딩 NudgeCTA fold 문제 수정 (커밋 `52c191b`)
+
+- 기존: NudgeCTA가 페이지 최하단에 위치 → 스크롤 6단계 필요
+- `JudgmentCard.tsx`: `isSharedLanding=true` 시 ScoreGauge 바로 아래로 NudgeCTA 이동
+- 결과: 판정 배지 → 점수 → **NudgeCTA** → AI 코멘트 → 이유 목록 → 공유 버튼 순
+- 모바일 375×812 뷰포트에서 fold 안 노출 확인 완료
+
+### 3. README + TASK.md 문서 최신화 (커밋 `7506771`, `13b9992` 외)
+
+- README: 실제 서비스 스크린샷 4장 포함, 기능 표·기술 스택·환경변수 정리
+- TASK.md: 코드 분석 기반 9차 재정렬 — P0-2/P0-3/P0-4/P0-6 완료 처리
 
 ---
 
@@ -138,6 +162,11 @@ Marketplace Dependency & Trust Expansion 전략 토론 결과, 핵심 판단:
 
 | 커밋 | 내용 |
 |------|------|
+| `52c191b` | 공유 랜딩 NudgeCTA fold 안으로 이동 (P0-6) |
+| `612a377` | gift·budget 결과 카드 네이버쇼핑 비교 링크 추가 (P0-4 완료) |
+| `7506771` | README 전면 개선 + 실제 서비스 스크린샷 4장 추가 |
+| `fdd0da6` | decide 네이버쇼핑 비교 링크 + 파트너스 안내 문구 |
+| `67fb9a6` | CTA 문구 쿠팡 브랜딩 제거 ("최저가 확인하기") |
 | `85f5a25` | 쿠팡 deeplink API — 파트너스 트래킹 코드 포함 URL 변환 |
 | `2522339` | 공유 OG 이미지 전면 개선 (동적 생성) |
 | `eea34e3` | 우측 하단 플로팅 피드백 버튼 |
@@ -203,11 +232,12 @@ npm run dev  # http://localhost:3000
 
 ## 다음 작업 (TASK.md 기준)
 
+> **Dev P0 작업 전체 완료.** 남은 것은 운영 작업 2개뿐.
+
 | 우선순위 | 작업 | 담당 |
 |----------|------|------|
-| P0-1 | 커뮤니티 배포 실행 (클리앙/뽐뿌/오카) | 운영 |
+| **P0-1** | 커뮤니티 배포 실행 (클리앙/뽐뿌/오카) — 단 한 번도 미실행 | 운영 |
 | P0-5 | 쿠팡 파트너스 대시보드 주 2회 체크 루틴 수립 | 운영 |
-| P0-6 | result 페이지 모바일 fold 확인 (NudgeCTA 노출) | Dev |
 
 **보류/차단된 작업 (재평가 조건: 유입 200명 달성 후)**
 - 11번가/G마켓/SSG 직접 연동
