@@ -1,33 +1,32 @@
-# Project Hand-off: shopping-gpt
+# Project Hand-off: shopping-gpt (Shop Now)
 
-**Last updated:** 2026-06-05  
+**Last updated:** 2026-06-08  
 **Branch:** master  
-**Last commit:** `70389c5` — chore: add ESLint and Prettier configuration
+**Last commit:** `a29aa11` — chore: update OG image and metadata for 상품 추천기 rename  
+**Production URL:** https://shop-now-ebon.vercel.app
 
 ---
 
 ## What This Project Is
 
-**Shopping GPT** — a Korean-language AI shopping assistant built with Next.js 16 + OpenAI. Mobile-first, single-page-app feel. Three core features:
+**Shop Now** — 한국어 AI 쇼핑 어시스턴트 (Next.js 16 + OpenAI + 쿠팡 Partners API). 모바일 퍼스트, SPA 느낌의 단일 앱.
 
-| Route | Feature | Description |
-|-------|---------|-------------|
-| `/gift` | 선물 추천기 | Gift recommendation: enter relationship, age, budget → GPT returns top 3 gifts |
-| `/decide` | 살까말까 결정기 | Buy-or-not analyzer: enter product name → GPT gives cold analysis |
-| `/budget` | 가성비 레이더 | Best-value finder: enter category + budget → GPT finds top value picks |
-
-All three pages call Coupang partner links via a helper in `lib/coupang.ts`.
+| Route | 기능 | 설명 |
+|-------|------|------|
+| `/gift` | 상품 추천기 | 카테고리/예산/목적/성별-연령대 선택 → GPT가 상품 3개 추천 + 쿠팡 실시간 가격/이미지 |
+| `/decide` | 살까말까 결정기 | 상품명 입력 → GPT가 구매 추천도(0~100점) + 사야/참아야 이유 + 대안 상품 |
+| `/budget` | 가성비 레이더 | 카테고리/예산 선택 → GPT가 가성비 최고/무난/프리미엄 3종 추천 + 쿠팡 실시간 가격/이미지 |
 
 ---
 
 ## Tech Stack
 
-- **Framework:** Next.js 16.2.7 (App Router) — note this is a newer version with breaking changes; see `node_modules/next/dist/docs/` for current API docs
-- **UI:** Tailwind CSS v4 (PostCSS plugin approach, no config file)
-- **AI:** OpenAI SDK v6 (`openai` package) — client lazy-initialized to avoid build-time crash
-- **Testing:** Playwright (e2e tests in `e2e/`)
-- **Linting:** ESLint 9 + `eslint-config-next` flat config (`eslint.config.mjs`)
-- **Formatting:** Prettier 3 (`.prettierrc`)
+- **Framework:** Next.js 16.2.7 (App Router, Turbopack)
+- **UI:** Tailwind CSS v4 (PostCSS, 설정 파일 없음)
+- **AI:** OpenAI SDK v6 (`gpt-4o-mini`, 서버 사이드)
+- **쇼핑:** 쿠팡 Partners API (HMAC-SHA256 서명, 실시간 상품 검색)
+- **Testing:** Playwright (e2e, `e2e/`)
+- **Linting:** ESLint 9 flat config (`eslint.config.mjs`) + Prettier 3
 - **Deploy:** Vercel (`npm run deploy` → `vercel --prod`)
 
 ---
@@ -36,95 +35,128 @@ All three pages call Coupang partner links via a helper in `lib/coupang.ts`.
 
 ```
 app/
-  layout.tsx          — root layout, Navbar, forced light color-scheme
-  page.tsx            — landing/home page with Hero + feature cards
-  gift/
-    layout.tsx
-    page.tsx          — gift recommendation form + results
-  decide/
-    layout.tsx
-    page.tsx          — buy-or-not form + results
-  budget/
-    layout.tsx
-    page.tsx          — budget/value form + results
-  opengraph-image.tsx — OG image (SVG-based, recently fixed)
+  layout.tsx          — 루트 레이아웃, Navbar, OG/Twitter 메타
+  page.tsx            — 홈 (Hero + 기능 카드 3개)
+  gift/page.tsx       — 상품 추천기 폼 + 결과
+  decide/page.tsx     — 살까말까 결정기 폼 + 결과
+  budget/page.tsx     — 가성비 레이더 폼 + 결과
+  opengraph-image.tsx — OG 이미지 (SVG 기반, edge runtime)
+  api/recommend/
+    gift/route.ts     — OpenAI 호출 → 쿠팡 검색 병렬 처리 → 응답
+    decide/route.ts   — OpenAI 호출 → 응답
+    budget/route.ts   — OpenAI 호출 → 쿠팡 검색 병렬 처리 → 응답
 
 components/
   Logo.tsx
-  Navbar.tsx          — segmented control style, active state
+  Navbar.tsx          — 세그먼트 컨트롤 스타일, 활성 상태
   LoadingSpinner.tsx
   CoupangButton.tsx
   KakaoShareButton.tsx
-  PillGroup.tsx       — single-select pill button group
-  MultiPillGroup.tsx  — multi-select pill button group
+  PillGroup.tsx       — 단일 선택 필 버튼 그룹
+  MultiPillGroup.tsx  — 다중 선택 필 버튼 그룹
 
 lib/
-  openai.ts           — lazy OpenAI client init
-  coupang.ts          — Coupang partner link helper
+  openai.ts           — OpenAI 클라이언트 lazy init
+  coupang.ts          — HMAC 서명 + searchCoupang() + generateCoupangLink()
 ```
 
 ---
 
-## Recent Work (last session, 2026-06-05)
+## 오늘 작업 내역 (2026-06-08)
 
-### UX overhaul (commit `7334593`)
-- Replaced all `<select>` dropdowns with pill button groups (`PillGroup`, `MultiPillGroup`)
-- Redesigned Hero section: strong headline, single primary CTA, trust signals
-- Navbar upgraded to segmented control with clear active state
-- Fixed dark mode forcing light `color-scheme`
-- Improved typography: `font-black`, `tracking-tight`
-- Hover lift + shadow on feature cards
+### 1. GPT 프롬프트 개선 (커밋 `13a3afd`)
+- gift/budget 프롬프트에서 `price` 필드 제거 (GPT가 가격 생성하던 것 제거)
+- 상품 품질 규칙 추가: 완제품만, 브랜드+모델명 필수, 단종 금지, keyword 구체화
+- budget 프롬프트에 `category` 필드 추가
 
-### OG image fixes (commits `a5c0adb`, `a7ca21e`, `815c316`)
-- Replaced emoji in OG image with SVG icon
-- Fixed text overlap in OG image layout
-- Fixed broken checkmark icons (was using emoji `✓`, switched to styled spans)
+### 2. Frontend 가격 영역 임시 제거 (커밋 `3b9d773`)
+- gift/budget 페이지에서 "예상가격" 텍스트 제거
+- GiftItem, BudgetItem 타입에서 `price` 제거
 
-### Dev tooling (commits `68306bd`, `70389c5`)
-- Added `.env.sample` — all required env vars documented with placeholder values
-- Added ESLint + Prettier: `eslint.config.mjs` (Next.js 16 flat config, TypeScript, prettier rules)
-- `npm run lint` → `eslint .` (Next.js 16에서 `next lint` 제거됨)
-- `npm run format` → `prettier --write .`
-- Prettier applied to all source files (17 files formatted)
+### 3. 쿠팡 API 환경변수 추가 (커밋 `87da9af`)
+- `.env.sample`에 `COUPANG_ACCESS_KEY`, `COUPANG_SECRET_KEY` 추가
+
+### 4. 쿠팡 Partners API 연동 (커밋 `48eed4d`)
+- `lib/coupang.ts`에 `searchCoupang(keyword)` 구현
+- **HMAC 서명 정확한 포맷**: datetime=`YYMMDDTHHmmssZ`, message=`datetime+method+path+query`
+- gift/budget API 라우트에서 GPT 결과 후 쿠팡 API 병렬 호출 (`Promise.allSettled`)
+- 실제 price/image/rating/reviewCount/coupangUrl 데이터 주입
+- API 실패 시 기존 검색 URL로 폴백
+- gift/budget 페이지에 실시간 최저가, 상품 이미지, 평점/리뷰수 표시
+
+### 5. OG 이미지 + 메타데이터 업데이트 (커밋 `a29aa11`)
+- OG 이미지: "선물 추천기" 🎁 → "상품 추천기" 🛍️
+- layout.tsx 메타 description 동기화
+
+### 6. Vercel 배포
+- 빌드 성공, 에러 0
+- https://shop-now-ebon.vercel.app 배포 완료
 
 ---
 
-## Known State / Pending Work
+## 현재 상태
 
-**핵심 미완료 작업:** GPT 생성 가격 → 쿠팡 API 실시간 가격으로 교체 (자세한 내용은 `TASK.md`, 배경은 `TODO.md`)
+| 항목 | 상태 |
+|------|------|
+| GPT 프롬프트 (price 제거, 규칙 강화) | ✅ 완료 |
+| Frontend 가격 영역 정리 | ✅ 완료 |
+| 쿠팡 Partners API 연동 | ✅ 완료 |
+| 실시간 가격/이미지/평점 표시 | ✅ 완료 |
+| OG 이미지 업데이트 | ✅ 완료 |
+| Vercel 배포 | ✅ 완료 |
+| lint: 0 errors (warning 1개 — e2e unused var) | ✅ |
 
-### 작업 순서 (TASK.md 기준)
+---
 
-| 순서 | 작업 | 상태 |
-|------|------|------|
-| 1 | GPT 프롬프트에서 `price` 제거, `keyword`/`category` 추가 | 미완료 |
-| 2 | Frontend 가격 영역 임시 제거 (API 연동 전 신뢰도 확보) | 미완료 |
-| 3 | 쿠팡 Partners API 연동 (`searchCoupang` 함수 구현) | 미완료 — API Key 필요 |
-| 4 | Frontend 실제 가격/이미지/평점 표시 | 미완료 — 3번 완료 후 |
+## 쿠팡 API 핵심 정보
 
-- OG image is functional and deployed
-- Codebase is clean (lint: 0 errors, 1 warning in e2e test unused var)
+```typescript
+// lib/coupang.ts — generateHmac()
+// 공식 문서 기준 서명 포맷
+const datetime = `${yy}${MM}${dd}T${HH}${mm}${ss}Z`; // e.g. 260608T120000Z
+const [path, query = ""] = url.split("?");
+const message = datetime + method + path + query;      // ? 제외한 query
+const signature = HmacSHA256(secretKey, message).hex;
+// Authorization: CEA algorithm=HmacSHA256, access-key=..., signed-date=..., signature=...
+
+// 검색 엔드포인트
+GET /v2/providers/affiliate_open_api/apis/openapi/v1/products/search?keyword=...&limit=1
+// 응답: data.productData[0].{productPrice, productImage, productUrl, productRating, productReviewCount}
+```
 
 ---
 
 ## Environment / Config
 
-- `.env.sample` — 필요한 모든 환경변수 키와 설명 포함
-- **OPENAI_API_KEY** — Vercel env vars + `.env.local`에 설정 필요
-- **NEXT_PUBLIC_KAKAO_APP_KEY** — Kakao Developers에서 발급
-- **NEXT_PUBLIC_COUPANG_PARTNER_ID** — Coupang Partners에서 발급
-- **NEXT_PUBLIC_BASE_URL** — 배포 도메인 (예: `https://your-domain.vercel.app`)
-- Local dev: `npm run dev` → `http://localhost:3000`
-- Production: deployed on Vercel
+| 변수 | 설명 | 위치 |
+|------|------|------|
+| `OPENAI_API_KEY` | OpenAI API 키 | Vercel env + `.env.local` |
+| `NEXT_PUBLIC_KAKAO_APP_KEY` | 카카오 JS 앱 키 | Vercel env + `.env.local` |
+| `NEXT_PUBLIC_COUPANG_PARTNER_ID` | 쿠팡 파트너 ID (`AF2316808`) | Vercel env + `.env.local` |
+| `COUPANG_ACCESS_KEY` | 쿠팡 API Access Key (UUID) | Vercel env + `.env.local` ⚠️ |
+| `COUPANG_SECRET_KEY` | 쿠팡 API Secret Key (hex 40자) | Vercel env + `.env.local` ⚠️ |
+| `NEXT_PUBLIC_BASE_URL` | 배포 도메인 | Vercel env + `.env.local` |
+
+> ⚠️ `COUPANG_ACCESS_KEY`, `COUPANG_SECRET_KEY`는 Vercel 대시보드 환경변수에 아직 추가 필요
 
 ---
 
 ## How to Pick Up
 
-1. `git pull origin master`
-2. `cp .env.sample .env.local` 후 실제 키 값 채우기
-3. `npm install`
-4. `npm run dev` → `http://localhost:3000`
-5. Core pages to test: `/`, `/gift`, `/decide`, `/budget`
-6. `npm run lint` — ESLint 검사
-7. `npm run format` — Prettier 포맷 적용
+```bash
+git pull origin master
+cp .env.sample .env.local  # 실제 키 값 채우기
+npm install
+npm run dev  # http://localhost:3000
+```
+
+**명령어**
+- `npm run lint` — ESLint 검사
+- `npm run format` — Prettier 적용
+- `npm run deploy` — Vercel 프로덕션 배포
+
+**다음 가능한 작업**
+- Vercel 환경변수에 `COUPANG_ACCESS_KEY` / `COUPANG_SECRET_KEY` 추가 (현재 프로덕션에서 쿠팡 가격 미표시)
+- `/decide` 대안 상품에도 쿠팡 API 연동 (현재 키워드 검색 URL만 사용)
+- e2e 테스트 업데이트 (gift 페이지 폼 변경 반영)
+- 테스트 스크립트 정리 (`scripts/test-coupang.mjs`, `COUPANG_API_DEBUG.md` 삭제 가능)
