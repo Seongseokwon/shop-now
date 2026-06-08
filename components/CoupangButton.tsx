@@ -18,7 +18,7 @@ export default function CoupangButton({ url, productName }: CoupangButtonProps) 
         track("coupang_click", { product: productName ?? "unknown", url })
       }
     >
-      쿠팡에서 최저가 확인 →
+      최저가 확인하기 →
     </a>
   );
 }
