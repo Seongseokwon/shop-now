@@ -5,8 +5,10 @@ import CoupangButton from "@/components/CoupangButton";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import MultiPillGroup from "@/components/MultiPillGroup";
 import JudgmentCard from "@/components/JudgmentCard";
+import JudgmentBadges from "@/components/JudgmentBadges";
 import { encodeResult } from "@/lib/resultUrl";
 import { saveToHistory } from "@/components/DecideHistory";
+import { recordJudgment, loadStats, getNewlyEarned, type Badge } from "@/lib/badges";
 
 const REASONS = [
   "가격이 비쌈",
@@ -43,6 +45,7 @@ export default function DecidePage() {
   const [result, setResult] = useState<Result | null>(null);
   const [shareUrl, setShareUrl] = useState<string>("");
   const [error, setError] = useState("");
+  const [newBadges, setNewBadges] = useState<Badge[]>([]);
 
   function toggleReason(r: string) {
     setReasons((prev) =>
@@ -92,6 +95,12 @@ export default function DecidePage() {
         const encoded = encodeResult(payload);
         setShareUrl(`/result?d=${encoded}`);
         saveToHistory(payload);
+
+        // 배지 통계 기록 및 새 배지 감지
+        const prevStats = loadStats();
+        const nextStats = recordJudgment(data.verdict);
+        const newly = getNewlyEarned(prevStats, nextStats);
+        if (newly.length > 0) setNewBadges(newly);
       } catch {
         setShareUrl("/decide");
       }
@@ -242,6 +251,9 @@ export default function DecidePage() {
             shareUrl={shareUrl}
             onReset={reset}
           />
+
+          {/* 배지 시스템 */}
+          <JudgmentBadges newBadges={newBadges} />
 
           {result.alternatives.length > 0 && (
             <div>
