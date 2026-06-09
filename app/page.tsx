@@ -11,7 +11,7 @@ const features = [
         <path d="M12 7v6l4 2" stroke="#0066FF" strokeWidth="1.5" strokeLinecap="round" />
       </svg>
     ),
-    title: "살까말까 결정기",
+    title: "살까말까",
     emoji: "🤔",
     tagline: "구매 고민 AI 판단",
     desc: "상품명만 입력하면 AI가 냉정하게 사야 할지 분석",

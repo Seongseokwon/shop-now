@@ -145,7 +145,7 @@ export default function DecidePage() {
     <div className="flex flex-col gap-6">
       <div>
         <h2 className="text-2xl font-black text-[#1A1A1A] tracking-tight">
-          🤔 살까말까 결정기
+          🤔 살까말까
         </h2>
         <p className="text-[#555555] text-sm mt-1">
           상품명 입력 → AI가 사야 할지 냉정하게 판단

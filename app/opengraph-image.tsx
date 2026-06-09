@@ -243,7 +243,7 @@ export default function OgImage() {
               <span
                 style={{ fontSize: "24px", fontWeight: 800, color: "#1A1A1A" }}
               >
-                살까말까 결정기
+                살까말까
               </span>
               <span style={{ fontSize: "16px", color: "#666666" }}>
                 AI가 구매 추천도를 100점 만점으로 냉정 판단

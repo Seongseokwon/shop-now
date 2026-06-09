@@ -25,7 +25,7 @@
   <!-- Feature 2 -->
   <rect x="480" y="250" width="660" height="100" rx="16" fill="#F8F9FA" stroke="#E9ECEF" stroke-width="2"/>
   <text x="540" y="295" font-family="Arial, sans-serif" font-size="28" fill="#0066FF">🤔</text>
-  <text x="590" y="292" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1A1A1A">살까말까 결정기</text>
+  <text x="590" y="292" font-family="Arial, sans-serif" font-size="24" font-weight="700" fill="#1A1A1A">살까말까</text>
   <text x="590" y="325" font-family="Arial, sans-serif" font-size="16" fill="#666666">AI가 구매 추천도를 점수로 판단</text>
 
   <!-- Feature 3 -->
