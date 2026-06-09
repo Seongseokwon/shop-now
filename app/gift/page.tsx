@@ -185,7 +185,7 @@ export default function GiftPage() {
         </form>
       )}
 
-      {loading && <LoadingSpinner />}
+      {loading && <LoadingSpinner mode="gift" />}
 
       {result && (
         <div className="flex flex-col gap-4">

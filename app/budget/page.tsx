@@ -140,7 +140,7 @@ export default function BudgetPage() {
         </form>
       )}
 
-      {loading && <LoadingSpinner />}
+      {loading && <LoadingSpinner mode="budget" />}
 
       {result && (
         <div className="flex flex-col gap-4">

@@ -253,7 +253,7 @@ export default function DecidePage() {
         </form>
       )}
 
-      {loading && <LoadingSpinner />}
+      {loading && <LoadingSpinner mode="decide" productName={productName} />}
 
       {result && shareUrl && (
         <>
